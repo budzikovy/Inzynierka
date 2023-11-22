@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>11151685-c70e-45b1-957d-654387958cc4</UserSecretsId>
+    <UserSecretsId>6451ce9d-6bfb-4b56-aa5d-7f6b3fdbf67c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
-    <PackageReference Include="SendGrid" Version="9.28.1" />
   </ItemGroup>
 
 </Project>
