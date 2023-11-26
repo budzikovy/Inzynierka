@@ -10,16 +10,14 @@ namespace Inz_Fn.Controllers
     [Route("[controller]")]
     public class StockController : Controller
     {
-        [HttpGet]
-        public async Task<ViewResult> Get()
+        public async Task<IActionResult> Stock()
         {
-            string stockData = await GetStockData();
-            var model = new StockData { Data = stockData };
-            return View(model);
+            List<Stock_model> stockModels = await GetStockData();
+            return View(stockModels);
         }
 
 
-        private async Task<string> GetStockData()
+        private async Task<List<Stock_model>> GetStockData()
         {
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             string symbol = "AAPL";
@@ -32,11 +30,20 @@ namespace Inz_Fn.Controllers
             {
                 string content = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(content);
-                return json.ToString();
+                JToken results = json["results"];
+
+                List<Stock_model> stockModels = new List<Stock_model>();
+                foreach (JToken result in results)
+                {
+                    Stock_model stockModel = result.ToObject<Stock_model>();
+                    stockModels.Add(stockModel);
+                }
+
+                return stockModels;
             }
             else
             {
-                return $"Error: {response.StatusCode}";
+                throw new Exception($"Error: {response.StatusCode}");
             }
         }
     }

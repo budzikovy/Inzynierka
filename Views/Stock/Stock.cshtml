@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Inz_Fn.Models.Stock_model>
+
+@{
+    ViewData["Title"] = "Stock";
+}
+
+<h1>Stock</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.c)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.h)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.l)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.n)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.o)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.otc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.t)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.v)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.vw)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.c)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.h)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.l)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.n)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.o)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.otc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.t)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.v)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.vw)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
