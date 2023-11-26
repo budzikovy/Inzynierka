@@ -1,0 +1,15 @@
+﻿@model List<SecurityData>
+
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Close Price</th>
+    </tr>
+    @foreach (var price in Model)
+    {
+        <tr>
+            <td>@price.Timestamp</td>
+            <td>@price.Close</td>
+        </tr>
+    }
+</table>
