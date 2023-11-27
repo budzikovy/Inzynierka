@@ -14,5 +14,12 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+}
+
+.vh-100-header {
+    height: calc(100vh - 80px); 
+}
+
+.pt-12p{
+    padding-top: 12%;
 }
