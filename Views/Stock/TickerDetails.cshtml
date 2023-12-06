@@ -1,0 +1,47 @@
+﻿@model Inz_Fn.Models.TickDetails
+@{
+    ViewData["Title"] = "Ticker Details";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h4>TickDetails</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Active
+        </dt>
+        <dd class="col-sm-10">
+            @Model.active
+        </dd>
+        <dt class="col-sm-2">
+            CIK
+        </dt>
+        <dd class="col-sm-10">
+            @Model.cik
+        </dd>
+        <dt class="col-sm-2">
+            Composite FIGI
+        </dt>
+        <dd class="col-sm-10">
+            @Model.composite_figi
+        </dd>
+        <dt class="col-sm-2">
+            Address
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.address != null)
+            {
+                @Model.address.address1 @Model.address.city @Model.address.postal_code @Model.address.state
+            }
+            else
+            {
+                <p>Brak danych</p>
+            }
+        </dd>
+        <!-- Dopisać reszte -->
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

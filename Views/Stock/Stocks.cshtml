@@ -1,17 +1,17 @@
-﻿@model IEnumerable<Inz_Fn.Models.StockTickers>
+﻿@model IEnumerable<Inz_Fn.Models.Stock_model>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Stocks";
 }
 
-<h1>View</h1>
+<h1>Stock</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.T)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.c)
             </th>
@@ -45,9 +45,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">@Html.DisplayFor(modelItem => item.T)</a>
-                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.c)
             </td>

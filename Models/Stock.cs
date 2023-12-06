@@ -14,6 +14,5 @@ namespace Inz_Fn.Models
         public int Price_per_stock { get; set; }
         [Required]
         public int Amount { get; set; } 
-
     }
 }

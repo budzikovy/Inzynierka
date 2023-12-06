@@ -1,0 +1,23 @@
+﻿@model AggregatesViewModel
+
+@using (Html.BeginForm("Stocks", "Stock", FormMethod.Post))
+{
+    @Html.LabelFor(model => model.symbol)
+    @Html.DropDownListFor(model => model.symbol, (SelectList)ViewBag.Symbols)
+
+    @Html.LabelFor(model => model.multiplier)
+    @Html.TextBoxFor(model => model.multiplier, new { @type = "number", @min = 1 })
+
+
+    @Html.LabelFor(model => model.timespan)
+    @Html.DropDownListFor(model => model.timespan,(SelectList)ViewBag.TimeUnits)
+
+    @Html.LabelFor(model => model.from)
+    @Html.TextBoxFor(model => model.from, new { @type = "date" })
+
+    @Html.LabelFor(model => model.to)
+    @Html.TextBoxFor(model => model.to, new { @type = "date" })
+
+
+    <input type="submit" value="Submit" />
+}
