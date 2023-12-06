@@ -17,6 +17,10 @@ namespace Inz_Fn.Controllers
         {
             return View();
         }
+        public IActionResult PageNotFound()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
