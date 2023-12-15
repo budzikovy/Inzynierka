@@ -9,9 +9,11 @@ namespace Inz_Fn.Models
         [Required]
         public int Stock_Id { get; set; }
         [Required]
-        public int User_Id { get; set; }
+        public char User_Id { get; set; }
         [Required]
         public int Price_per_stock { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
         [Required]
         public int Amount { get; set; } 
     }

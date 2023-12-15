@@ -47,7 +47,10 @@ namespace Inz_Fn.Controllers
         [HttpGet("TickerDetails")]
         public async Task<IActionResult> TickerDetails(string id)
         {
+            string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             TickDetails TickDetails = await GetTickerDetails(id);
+            TickDetails.branding.logo_url+= "?apiKey="+apiKey;
+            TickDetails.branding.icon_url += "?apiKey=" + apiKey;
             return View(TickDetails);
         }
 

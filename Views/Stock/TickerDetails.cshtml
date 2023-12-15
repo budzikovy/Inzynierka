@@ -7,6 +7,8 @@
 <div>
     <h4>TickDetails</h4>
     <hr />
+    <img src="@Model.branding.logo_url" alt="Logo" />
+
     <dl class="row">
         <dt class="col-sm-2">
             Active
@@ -39,7 +41,19 @@
                 <p>Brak danych</p>
             }
         </dd>
-        <!-- Dopisać reszte -->
+        <dt class="col-sm-2">
+            Cena zamknięcia 
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.weighted_shares_outstanding != 0)
+            {
+                @(((double)Model.market_cap / Model.weighted_shares_outstanding).ToString("F2"))
+            }
+            else
+            {
+                <p>Brak danych (dzielenie przez zero)</p>
+            }
+        </dd>
     </dl>
 </div>
 <div>
