@@ -17,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddDefaultIdentity<Inz_FnUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -50,10 +51,25 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages(); 
 app.MapControllerRoute(
-    name: "stock",
-    pattern: "Stock/{action=Index}/{id?}");
-app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await CreateRoles(roleManager);
+}
 
 app.Run();
+async Task CreateRoles(RoleManager<IdentityRole> roleManager)
+{
+    string[] roleNames = { "Admin", "User", "Manager" };
+    foreach (var roleName in roleNames)
+    {
+        var roleExist = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExist)
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}

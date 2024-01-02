@@ -11,5 +11,6 @@ namespace Inz_Fn.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { 
         }
         public DbSet<Stock> Stock { get; set; }
+        public DbSet<StockHistory> StocksHistory { get; set; }
     }
 }

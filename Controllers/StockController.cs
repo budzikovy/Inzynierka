@@ -5,13 +5,68 @@ using Newtonsoft.Json.Linq;
 using Inz_Fn.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Inz_Fn.Data;
+using Microsoft.AspNetCore.Identity;
+using Inz_Fn.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inz_Fn.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class StockController : Controller
     {
+
+
+        private readonly UserManager<Inz_FnUser> _userManager;
+        private readonly ApplicationDbContext _context;
+
+        public StockController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context)
+        {
+            _userManager = userManager;
+            _context = context;
+        }        
+        
+        [HttpPost("PurchaseStock")]
+        public async Task<IActionResult> PurchaseStock([FromForm] StockViewModel formStock)
+        {
+            string symbol = formStock.Stock_CIK;
+            double pricePerStock= formStock.Price_per_stock;
+            var model = new StockViewModel
+            {
+                Stock_CIK = symbol,
+                Price_per_stock = pricePerStock
+            };
+            return View(model);
+        }
+
+
+        [HttpPost("SaveStock")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveStock([FromForm] StockViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var stock = new Stock
+            {
+                Stock_CIK = model.Stock_CIK,
+                User_Id = user.Id,
+                Price_per_stock = model.Price_per_stock,
+                Date = DateTime.Now, // Ustawiamy aktualną datę, zakładając że to jest data transakcji
+                Amount = model.Amount
+            };
+
+            _context.Stock.Add(stock);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpGet("Index")]
         public async Task<IActionResult> Index()
         {
@@ -49,9 +104,15 @@ namespace Inz_Fn.Controllers
         {
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             TickDetails TickDetails = await GetTickerDetails(id);
+            TickerPrevClose TickerPrevClose = await GetStockPreviousClose(id);
             TickDetails.branding.logo_url+= "?apiKey="+apiKey;
             TickDetails.branding.icon_url += "?apiKey=" + apiKey;
-            return View(TickDetails);
+            TickerDetailsPrice tickerDetailsPrice = new TickerDetailsPrice
+            {
+                tickDetails=TickDetails,
+                tickerPrevClose = TickerPrevClose
+            };
+            return View(tickerDetailsPrice);
         }
 
         private async Task<TickDetails> GetTickerDetails(string tck)
@@ -120,7 +181,52 @@ namespace Inz_Fn.Controllers
             {
                 throw new Exception($"Error: {response.StatusCode}");
             }
-        } 
+        }
+        private async Task<TickerPrevClose> GetStockPreviousClose(string Ticker)
+        {
+            string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
+            string symbol = Ticker;
+            string apiUrl = $"https://api.polygon.io/v2/aggs/ticker/{symbol}/prev?adjusted=true&apiKey={apiKey}";
+
+            using HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(apiUrl);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(content);
+                JToken results = json["results"];
+
+                List<TickerPrevClose> tickersPrevClose = new List<TickerPrevClose>();
+                foreach (JToken result in results)
+                {
+                    TickerPrevClose tickerPrev= result.ToObject<TickerPrevClose>();
+                    tickersPrevClose.Add(tickerPrev);
+                }
+                TickerPrevClose tickerPrevClose = new TickerPrevClose();
+                tickerPrevClose = tickersPrevClose[0];
+                return tickerPrevClose;
+            }
+            else
+            {
+                throw new Exception($"Error: {response.StatusCode}");
+            }
+/*
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(content);
+                JToken results = json["results"];
+
+                TickerPrevClose tickerPrevClose = new TickerPrevClose();
+                tickerPrevClose = results.ToObject<TickerPrevClose>();
+                return tickerPrevClose;
+            }
+            else
+            {
+                throw new Exception($"Error: {response.StatusCode}");
+            }*/
+
+        }
         private async Task<List<StockTickers>> GetGroupedDaily()
         {
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";

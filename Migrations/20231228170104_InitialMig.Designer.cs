@@ -3,6 +3,7 @@ using System;
 using Inz_Fn.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inz_Fn.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228170104_InitialMig")]
+    partial class InitialMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,12 +97,11 @@ namespace Inz_Fn.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<double>("Price_per_stock")
-                        .HasColumnType("double");
+                    b.Property<int>("Price_per_stock")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Stock_CIK")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Stock_Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("User_Id")
                         .IsRequired()
@@ -109,39 +110,6 @@ namespace Inz_Fn.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stock");
-                });
-
-            modelBuilder.Entity("Inz_Fn.Models.StockHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Income")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Price_per_stock")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SellDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("Stock_CIK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("User_Id")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StocksHistory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

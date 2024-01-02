@@ -1,0 +1,17 @@
+﻿@model Inz_Fn.Models.StockViewModel
+
+<form asp-action="SaveStock" method="post">
+    <div class="form-group">
+        <label for="Stock_CIK">Stock ID</label>
+        <input type="text" class="form-control" id="Stock_CIK" name="Stock_CIK" value="@Model.Stock_CIK" required readonly>
+    </div>
+    <div class="form-group">
+        <label for="Price_per_stock">Price per Stock</label>
+        <input type="text" class="form-control" id="Price_per_stock" name="Price_per_stock" value="@Model.Price_per_stock" required readonly>
+    </div>
+    <div class="form-group">
+        <label for="Amount">Amount</label>
+        <input type="number" class="form-control" id="Amount" name="Amount" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

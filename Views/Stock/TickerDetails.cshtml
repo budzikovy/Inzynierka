@@ -1,40 +1,39 @@
-﻿@model Inz_Fn.Models.TickDetails
+﻿@model Inz_Fn.Models.TickerDetailsPrice
 @{
     ViewData["Title"] = "Ticker Details";
 }
 <h1>@ViewData["Title"]</h1>
-
 <div>
     <h4>TickDetails</h4>
     <hr />
-    <img src="@Model.branding.logo_url" alt="Logo" />
+    <img src="@Model.tickDetails.branding.logo_url" alt="Logo" />
 
     <dl class="row">
         <dt class="col-sm-2">
             Active
         </dt>
         <dd class="col-sm-10">
-            @Model.active
+            @Model.tickDetails.active
         </dd>
         <dt class="col-sm-2">
             CIK
         </dt>
         <dd class="col-sm-10">
-            @Model.cik
+            @Model.tickDetails.cik
         </dd>
         <dt class="col-sm-2">
             Composite FIGI
         </dt>
         <dd class="col-sm-10">
-            @Model.composite_figi
+            @Model.tickDetails.composite_figi
         </dd>
         <dt class="col-sm-2">
             Address
         </dt>
         <dd class="col-sm-10">
-            @if (Model.address != null)
+            @if (Model.tickDetails.address != null)
             {
-                @Model.address.address1 @Model.address.city @Model.address.postal_code @Model.address.state
+                @Model.tickDetails.address.address1 @Model.tickDetails.address.city @Model.tickDetails.address.postal_code @Model.tickDetails.address.state
             }
             else
             {
@@ -45,15 +44,14 @@
             Cena zamknięcia 
         </dt>
         <dd class="col-sm-10">
-            @if (Model.weighted_shares_outstanding != 0)
-            {
-                @(((double)Model.market_cap / Model.weighted_shares_outstanding).ToString("F2"))
-            }
-            else
-            {
-                <p>Brak danych (dzielenie przez zero)</p>
-            }
+            @Model.tickerPrevClose.c
         </dd>
+        <form asp-action="PurchaseStock" method="post">
+            <input type="hidden" name="Stock_CIK" value="@Model.tickDetails.ticker" />
+            <input type="hidden" name="Price_per_stock" value="@Model.tickerPrevClose.c" />
+            <button type="submit" class="btn btn-primary">Kup teraz</button>
+        </form>
+
     </dl>
 </div>
 <div>

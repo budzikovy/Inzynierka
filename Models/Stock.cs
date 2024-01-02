@@ -7,11 +7,11 @@ namespace Inz_Fn.Models
         [Key]
         public int Id {  get; set; }
         [Required]
-        public int Stock_Id { get; set; }
+        public string Stock_CIK { get; set; }
         [Required]
-        public char User_Id { get; set; }
+        public string User_Id { get; set; }
         [Required]
-        public int Price_per_stock { get; set; }
+        public double Price_per_stock { get; set; }
         [Required]
         public DateTime Date { get; set; }
         [Required]
