@@ -1,5 +1,5 @@
 ﻿using System.Net;
-
+ 
 namespace Inz_Fn.Models
 {
     public class TickDetails

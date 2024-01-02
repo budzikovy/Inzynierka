@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Inz_Fn.Areas.Identity.Data.Inz_FnUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -37,6 +40,21 @@
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
                             </ul>
                          </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Manage
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" asp-controller="Admin"
+                                       asp-action="Users">Users</a>
+                                    <a class="dropdown-item" asp-controller="Admin"
+                                       asp-action="ListRoles">Roles</a>
+                                </ul>
+                            </li>
+                        }
 
                     </ul>
                 </div>

@@ -6,7 +6,11 @@
 <div>
     <h4>TickDetails</h4>
     <hr />
-    <img src="@Model.tickDetails.branding.logo_url" alt="Logo" />
+    @if (Model.tickDetails.branding != null)
+    {
+        <img src="@Model.tickDetails.branding.logo_url" alt="Logo" />
+    }
+    
 
     <dl class="row">
         <dt class="col-sm-2">

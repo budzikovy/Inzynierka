@@ -105,8 +105,17 @@ namespace Inz_Fn.Controllers
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             TickDetails TickDetails = await GetTickerDetails(id);
             TickerPrevClose TickerPrevClose = await GetStockPreviousClose(id);
-            TickDetails.branding.logo_url+= "?apiKey="+apiKey;
-            TickDetails.branding.icon_url += "?apiKey=" + apiKey;
+            if (TickDetails.branding != null) {
+                if (TickDetails.branding.logo_url != null)
+                {
+                    TickDetails.branding.logo_url += "?apiKey=" + apiKey;
+                }
+                if (TickDetails.branding.icon_url != null)
+                {
+                    TickDetails.branding.icon_url += "?apiKey=" + apiKey;
+                }
+            }
+            
             TickerDetailsPrice tickerDetailsPrice = new TickerDetailsPrice
             {
                 tickDetails=TickDetails,
