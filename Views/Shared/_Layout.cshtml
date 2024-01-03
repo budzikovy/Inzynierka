@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<Inz_Fn.Areas.Identity.Data.Inz_FnUser> SignInManager
+@{
+    var isHomePage = Context.Request.Path.Value.Equals("/");
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,12 +13,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inz_Fn.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
 </head>
 <body>
     <header class="sticky-top">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow">
             <div class="container d-flex">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inz_Fn</a>
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Inz_Fn</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,10 +27,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Stock
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu text-white" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
                             </ul>
@@ -34,7 +38,7 @@
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Manage
                                 </a>
@@ -49,7 +53,6 @@
 
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <!-- Dodajemy klasę ml-auto tutaj -->
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>
@@ -57,7 +60,7 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="@(!isHomePage ? "container" : "")">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
