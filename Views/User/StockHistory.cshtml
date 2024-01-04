@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Inz_Fn.Models.StockHistory>
+
+<h1>StockHistory</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Stock_CIK)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type_of_action)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price_per_stock_b)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price_per_stock_s)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Income)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stock_CIK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type_of_action)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price_per_stock_s)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Income)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

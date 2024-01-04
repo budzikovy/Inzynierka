@@ -3,21 +3,26 @@ namespace Inz_Fn.Models
 {
     public class StockHistory
     {
+        public StockHistory()
+        {
+            Id = Guid.NewGuid();
+        }
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
-        public int Stock_CIK { get; set; }
+        public string Stock_CIK { get; set; }
         [Required]
         public string User_Id { get; set; }
         [Required]
-        public int Price_per_stock { get; set; }
+        public string Type_of_action { get; set; }
+        [Required]
+        public double Price_per_stock_b { get; set; }
+        public double? Price_per_stock_s { get; set; }
         [Required]
         public DateTime Date { get; set; }
         [Required]
         public int Amount { get; set; }
-        [Required]
-        public DateTime SellDate { get; set; }
-        [Required]
-        public int Income { get; set; }
+        public DateTime? SellDate { get; set; }
+        public double? Income { get; set; }
     }
 }

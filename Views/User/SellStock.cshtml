@@ -1,0 +1,17 @@
+﻿@model SellStockViewModel
+
+<div class="container">
+    <h2>Sell Stock</h2>
+    <p>CIK: @Model.StockCIK</p>
+    <p>Price per Stock: @Model.PricePerStock.ToString("C")</p>
+    <p>Date: @Model.Date.ToShortDateString()</p>
+    <p>Current Price: @Model.CurrentPrice.ToString("C")</p>
+    <p>Amount: @Model.Amount</p>
+    <form asp-action="SellStockPerm" method="post">
+        <input type="hidden" name="StockId" value="@Model.StockId" />
+        <input type="hidden" name="CurrentPrice" value="@Model.CurrentPrice" />
+        <label for="Amount">Amount to sell:</label>
+        <input type="number" id="Amount" name="Amount" max="@Model.Amount" min="1" required />
+        <button type="submit" class="btn btn-primary">Sell</button>
+    </form>
+</div>
