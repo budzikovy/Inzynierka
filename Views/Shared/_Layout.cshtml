@@ -39,7 +39,26 @@
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
                             </ul>
-                         </li>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Your Stocks
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" asp-controller="User"
+                                       asp-action="StockPortfolio">Stock Portfolio</a>
+                                    <a class="dropdown-item" asp-controller="User"
+                                       asp-action="CurrentStocks">Current Stocks</a>
+                                    <a class="dropdown-item" asp-controller="User"
+                                       asp-action="StockHistory">History</a>
+                                    <a class="dropdown-item" asp-controller="User"
+                                       asp-action="Statistics">Statistics</a>
+                                </ul>
+                            </li>
+                        }
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -50,8 +69,6 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Admin"
                                        asp-action="Users">Users</a>
-                                    <a class="dropdown-item" asp-controller="Admin"
-                                       asp-action="ListRoles">Roles</a>
                                 </ul>
                             </li>
                         }

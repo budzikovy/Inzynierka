@@ -10,10 +10,11 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().T)
+                Ticker
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().c)
+                Close Price
+
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().h)
@@ -27,19 +28,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().o)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().otc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().t)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().v)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().vw)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -63,18 +51,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.o)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.otc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.t)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.v)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.vw)
-            </td>
         </tr>
 }
     </tbody>
@@ -82,7 +58,8 @@
 <div>
     @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
     {
-        if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 10 && i >= Model.Pagination.CurrentPage - 10))
+        if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
+
         {
             if (i == Model.Pagination.CurrentPage)
             {

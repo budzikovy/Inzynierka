@@ -56,7 +56,6 @@ namespace Inz_Fn.Controllers
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
-                Claims = userClaims.Select(c => c.Value).ToList(),
                 Roles = userRoles
             };
             //Pass the Model to the View
@@ -76,6 +75,7 @@ namespace Inz_Fn.Controllers
                 //Populate the user instance with the data from EditUserViewModel
                 user.Email = model.Email;
                 user.UserName = model.UserName;
+                user.EmailConfirmed = model.EmailConfirmed;
                 //UpdateAsync Method will update the user data in the AspNetUsers Identity table
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
