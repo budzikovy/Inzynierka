@@ -9,6 +9,7 @@ using Inz_Fn.Data;
 using Microsoft.AspNetCore.Identity;
 using Inz_Fn.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Inz_Fn.Controllers
 {
@@ -21,11 +22,15 @@ namespace Inz_Fn.Controllers
 
         private readonly UserManager<Inz_FnUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private IMemoryCache _memoryCache;
+        private const string StockTickersCacheKey = "StockTickersCacheKey";
 
-        public StockController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context)
+
+        public StockController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _context = context;
+            _memoryCache = memoryCache;
         }        
         
         [HttpPost("PurchaseStock")]
@@ -76,18 +81,28 @@ namespace Inz_Fn.Controllers
 
             return RedirectToAction("CurrentStocks", "User");
         }
-
         [HttpGet("Index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 20)
         {
-            // Użyj danych z modelu do pobrania danych giełdowych
             List<StockTickers> stockTickers = new List<StockTickers>();
             stockTickers = await GetGroupedDaily();
-<<<<<<< Updated upstream
-            return View("Index", stockTickers);
-        }
-=======
+            // Logika paginacji
+            var count = stockTickers.Count();
+            var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            var model = new StockTickersViewModel
+            {
+                StockTickers = items,
+                Pagination = new PaginationModel
+                {
+                    CurrentPage = currentPage,
+                    ItemsPerPage = items.Count,
+                    TotalItems = count
+                }
+            };
 
+            return View("Index", model);
+
+        }
             // Logika paginacji
             var count = stockTickers.Count();
             var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
@@ -124,7 +139,7 @@ namespace Inz_Fn.Controllers
             };
             return View("Index2", model);
         }*/
->>>>>>> Stashed changes
+
 
         [HttpGet("Aggregate")]
         public async Task<IActionResult> Aggregate()
@@ -216,7 +231,7 @@ namespace Inz_Fn.Controllers
             string from = model.from.ToString("yyyy-MM-dd");
             string to = model.to.ToString("yyyy-MM-dd");
             string apiUrl = $"https://api.polygon.io/v2/aggs/ticker/{symbol}/range/{multiplier}/{timespan}/{from}/{to}?apiKey={apiKey}";
-
+            Console.WriteLine(apiUrl);
             using HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(apiUrl);
 
@@ -286,67 +301,47 @@ namespace Inz_Fn.Controllers
 
         }
         private async Task<List<StockTickers>> GetGroupedDaily()
+{
+    if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
+    {
+        return cachedStockTickers;
+    }
+    else
+    {
+        // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
+        string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
+        string date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+        string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
+
+        using HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+        if (response.IsSuccessStatusCode)
         {
-            string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-            string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey={apiKey}";
+            string content = await response.Content.ReadAsStringAsync();
+            JObject json = JObject.Parse(content);
+            JToken results = json["results"];
 
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            List<StockTickers> stockTickers = new List<StockTickers>();
+            foreach (JToken result in results)
             {
-                string content = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(content);
-                JToken results = json["results"];
-
-                List<StockTickers> stockTickers = new List<StockTickers>();
-                foreach (JToken result in results)
-                {
-                    StockTickers stockTicker = result.ToObject<StockTickers>();
-                    stockTickers.Add(stockTicker);
-                }
-                return stockTickers;
+                StockTickers stockTicker = result.ToObject<StockTickers>();
+                stockTickers.Add(stockTicker);
             }
-            else
-            {
-<<<<<<< Updated upstream
-                throw new Exception($"Error: {response.StatusCode}");
-=======
-                // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
-                string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-                string date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-                string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
-
-                using HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    JObject json = JObject.Parse(content);
-                    JToken results = json["results"];
-
-                    List<StockTickers> stockTickers = new List<StockTickers>();
-                    foreach (JToken result in results)
-                    {
-                        StockTickers stockTicker = result.ToObject<StockTickers>();
-                        stockTickers.Add(stockTicker);
-                    }
-                    stockTickers = stockTickers.OrderBy(x => x.T).ToList();
+            stockTickers = stockTickers.OrderBy(x => x.T).ToList();
 
 
-                    // Zapisz dane w pamięci podręcznej
-                    _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
+            // Zapisz dane w pamięci podręcznej
+            _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
 
-                    return stockTickers;
-                }
-                else
-                {
-                    throw new Exception($"Error: {response.StatusCode}");
-                }
->>>>>>> Stashed changes
-            }
+            return stockTickers;
         }
+        else
+        {
+            throw new Exception($"Error: {response.StatusCode}");
+        }
+    }
+}
         /*private async Task<List<StockData>> GetStockData()
         {
             if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockData> cachedStockData))
