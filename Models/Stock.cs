@@ -4,8 +4,12 @@ namespace Inz_Fn.Models
 {
     public class Stock
     {
+        public Stock()
+        {
+            Id = Guid.NewGuid();
+        }
         [Key]
-        public int Id {  get; set; }
+        public Guid Id {  get; set; }
         [Required]
         public string Stock_CIK { get; set; }
         [Required]

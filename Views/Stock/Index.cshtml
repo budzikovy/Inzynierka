@@ -10,10 +10,17 @@
     <thead>
         <tr>
             <th>
+<<<<<<< Updated upstream
                 @Html.DisplayNameFor(model => model.T)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.c)
+=======
+                Ticker
+            </th>
+            <th>
+                Close Price
+>>>>>>> Stashed changes
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.h)
@@ -27,6 +34,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.o)
             </th>
+<<<<<<< Updated upstream
             <th>
                 @Html.DisplayNameFor(model => model.otc)
             </th>
@@ -39,6 +47,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.vw)
             </th>
+=======
+>>>>>>> Stashed changes
             <th></th>
         </tr>
     </thead>
@@ -63,19 +73,27 @@
             <td>
                 @Html.DisplayFor(modelItem => item.o)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.otc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.t)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.v)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.vw)
-            </td>
         </tr>
 }
     </tbody>
 </table>
+<<<<<<< Updated upstream
+=======
+<div>
+    @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
+    {
+        if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
+        {
+            if (i == Model.Pagination.CurrentPage)
+            {
+                <span>@i</span>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", "Stock", new { currentPage = i })">@i</a>
+            }
+        }
+        
+    }
+</div>
+>>>>>>> Stashed changes

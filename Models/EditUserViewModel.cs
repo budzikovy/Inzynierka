@@ -9,7 +9,6 @@ namespace Inz_Fn.Models
         //initialise Claims and Roles with a new list in the constructor.
         public EditUserViewModel()
         {
-            Claims = new List<string>();
             Roles = new List<string>();
         }
 
@@ -23,8 +22,8 @@ namespace Inz_Fn.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-
-        public List<string> Claims { get; set; }
+        [Required]
+        public bool EmailConfirmed { get; set; }
 
         public IList<string> Roles { get; set; }
     }
