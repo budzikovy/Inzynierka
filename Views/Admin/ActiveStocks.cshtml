@@ -1,0 +1,33 @@
+﻿@model AdmStatModel
+<div class="container">
+    <span>Invested Sum: @Model.investedSum</span>
+    <span>Total Stocks bought: @Model.allStocks</span>
+    <span>Average price per stock: @Model.averagePPS</span>
+</div>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User Id</th>
+                <th>CIK</th>
+                <th>Price per Stock</th>
+                <th>Date</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stock in Model.Stock)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("UserStocks", "Admin", new { UserId = stock.User_Id })">@stock.User_Id</a>
+                    </td>
+                    <td>@stock.Stock_CIK</td>
+                    <td>@stock.Price_per_stock</td>
+                    <td>@stock.Date.ToShortDateString()</td>
+                    <td>@stock.Amount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static ServiceStack.Script.Lisp;
 
 namespace Inz_Fn.Controllers
 {
@@ -204,6 +205,96 @@ namespace Inz_Fn.Controllers
             }
 
             return RedirectToAction("EditUser", new { UserId = UserId });
+        }
+        public IActionResult ActiveStocks() 
+        { 
+            var activeStocks = _context.Stock.ToList();
+            var sum = 0.00;
+            var allStocks = _context.Stock.Sum(x => x.Amount);
+            foreach (var stock in activeStocks) 
+            {
+                sum += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+            var model = new AdmStatModel
+            {   
+                averagePPS = sum/allStocks,
+                allStocks = allStocks,
+                investedSum = sum,
+                Stock = activeStocks
+            };
+            return View(model);
+        }
+        public IActionResult HistoryStocks() 
+        { 
+            var activeStocks = _context.StocksHistory.ToList();
+            var sum = 0.00;
+            var allStocks = _context.StocksHistory.Sum(x => x.Amount);/*
+            foreach (var stock in activeStocks) 
+            {
+                sum += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+            var model = new AdmStatModel
+            {   
+                averagePPS = sum/allStocks,
+                allStocks = allStocks,
+                investedSum = sum,
+                Stock = activeStocks
+            };*/
+            return View();
+        }
+
+        public async Task<IActionResult> UserStocks(string UserId)
+        {
+            Console.WriteLine("maciek");
+            Console.WriteLine(UserId);
+            Console.WriteLine("maciek");
+            
+            var user = await _userManager.FindByIdAsync(UserId);
+            if (user == null)
+            {
+                Console.WriteLine("a tut tez");
+                ViewBag.ErrorMessage = $"User with Id = {UserId} cannot be found";
+                return View("NotFound");
+            }
+            Console.WriteLine("a tut  juz tez");
+            var allStocks = _context.Stock.Where(x => x.User_Id == UserId).Sum(x => x.Amount);
+            var activeStocks = _context.Stock.Where(x => x.User_Id == UserId).ToList();
+            var sum = 0.00;
+            foreach (var stock in activeStocks)
+            {
+                sum += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+
+            var admStock = new AdmStatModel
+            {
+                averagePPS = sum / allStocks,
+                allStocks = allStocks,
+                investedSum = sum,
+                Stock = activeStocks
+            };
+            var allStocksH = _context.StocksHistory.Where(x => x.User_Id == UserId).Sum(x => x.Amount);
+            var activeStocksH = _context.StocksHistory.Where(x => x.User_Id == UserId).ToList();
+            var sumH = 0.00;
+            foreach (var stock in activeStocks)
+            {
+                sumH += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+            var admStockHis = new AdmStatHitsModel 
+            {
+                averagePPS = sumH / allStocksH,
+                allStocks = allStocksH,
+                investedSum = sumH,
+                StockHist = activeStocksH
+            };
+            var model = new AdmUserStocksModel 
+            { 
+                Id = user.Id,
+                Email = user.Email,
+                AdmStatHitsModel = admStockHis,
+                AdmStatModel = admStock
+
+            };
+            return View(model);
         }
     }
 }

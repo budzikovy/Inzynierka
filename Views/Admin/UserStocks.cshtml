@@ -1,0 +1,159 @@
+﻿@model AdmUserStocksModel
+@{
+    ViewBag.Title = "Edit User";
+}
+<style>
+    body {
+        font-family: Arial;
+    }
+
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+    }
+
+        /* Style the buttons inside the tab */
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #ddd;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #ccc;
+            }
+
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+    /* Style the close button */
+    .topright {
+        float: right;
+        cursor: pointer;
+        font-size: 28px;
+    }
+
+        .topright:hover {
+            color: red;
+        }
+</style>
+
+<h2>@Model.Email</h2>
+<p>@Model.Id</p>
+
+<div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'ActiveStock')" id="defaultOpen">Active Stock</button>
+    <button class="tablinks" onclick="openCity(event, 'HistoryStock')">History Stock</button>
+</div>
+
+<div id="ActiveStock" class="tabcontent">
+    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+    <h3>ActiveStock</h3>
+    <div class="container">
+        <span>Invested Sum: @Model.AdmStatModel.investedSum</span>
+        <span>Total Stocks bought: @Model.AdmStatModel.allStocks</span>
+        <span>Average price per stock: @Model.AdmStatModel.averagePPS</span>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CIK</th>
+                    <th>Price per Stock</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stock in Model.AdmStatModel.Stock)
+                {
+                    <tr>
+                        <td>@stock.Stock_CIK</td>
+                        <td>@stock.Price_per_stock</td>
+                        <td>@stock.Date.ToShortDateString()</td>
+                        <td>@stock.Amount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="HistoryStock" class="tabcontent">
+    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
+    <h3>HistoryStock</h3>
+    <div class="container">
+        <span>Invested Sum: @Model.AdmStatHitsModel.investedSum</span>
+        <span>Total Stocks bought: @Model.AdmStatHitsModel.allStocks</span>
+        <span>Average price per stock: @Model.AdmStatHitsModel.averagePPS</span>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>CIK</th>
+                    <th>Type of Action</th>
+                    <th>Price per Stock(Bought)</th>
+                    <th>Price per Stock(Sold)</th>
+                    <th>Amount</th>
+                    <th>Date of purchase</th>
+                    <th>Date of Sold</th>
+                    <th>Income</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stock in Model.AdmStatHitsModel.StockHist)
+                {
+                    <tr>
+                        <td>@stock.Stock_CIK</td>
+                        <td>@stock.Type_of_action</td>
+                        <td>@stock.Price_per_stock_b</td>
+                        <td>@stock.Price_per_stock_s</td>
+                        <td>@stock.Amount</td>
+                        <td>@stock.Date</td>
+                        <td>@stock.SellDate</td>
+                        <td>@stock.Income</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    function openCity(evt, action) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(action).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // Get the element with id="defaultOpen" and click on it
+    document.getElementById("defaultOpen").click();
+</script>

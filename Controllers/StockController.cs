@@ -85,12 +85,7 @@ namespace Inz_Fn.Controllers
         public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 20)
         {
             List<StockTickers> stockTickers = new List<StockTickers>();
-            stockTickers = await GetGroupedDaily();
-
-            return View("Index", model);
-
-        }
-            // Logika paginacji
+            stockTickers = await GetGroupedDaily();// Logika paginacji
             var count = stockTickers.Count();
             var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             var model = new StockTickersViewModel
@@ -287,22 +282,6 @@ namespace Inz_Fn.Controllers
 
         }
         private async Task<List<StockTickers>> GetGroupedDaily()
-{
-    if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
-    {
-        return cachedStockTickers;
-    }
-    else
-    {
-        // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
-        string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-        string date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-        string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
-
-        using HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-        if (response.IsSuccessStatusCode)
         {
             if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
             {
@@ -333,8 +312,8 @@ namespace Inz_Fn.Controllers
                     stockTickers = stockTickers.OrderBy(x => x.T).ToList();
 
 
-            // Zapisz dane w pamięci podręcznej
-            _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
+                    // Zapisz dane w pamięci podręcznej
+                    _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
 
                     return stockTickers;
                 }
@@ -344,12 +323,6 @@ namespace Inz_Fn.Controllers
                 }
             }
         }
-        else
-        {
-            throw new Exception($"Error: {response.StatusCode}");
-        }
-    }
-}
         /*private async Task<List<StockData>> GetStockData()
         {
             if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockData> cachedStockData))

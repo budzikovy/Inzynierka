@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inz_Fn.styles.css" asp-append-version="true" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
 </head>
 <body>
     <header class="sticky-top">
@@ -61,6 +63,8 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Admin"
                                        asp-action="Users">Users</a>
+                                    <a class="dropdown-item" asp-controller="Admin"
+                                       asp-action="ActiveStocks">Active Stocks</a>
                                 </ul>
                             </li>
                         }
