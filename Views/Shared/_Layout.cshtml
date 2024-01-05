@@ -1,5 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<Inz_Fn.Areas.Identity.Data.Inz_FnUser> SignInManager
+@{
+    var isHomePage = Context.Request.Path.Value.Equals("/");
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,14 +13,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inz_Fn.styles.css" asp-append-version="true" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
 </head>
 <body>
     <header class="sticky-top">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow @(isHomePage ? "" : "mb-5")">
             <div class="container d-flex">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Inz_Fn</a>
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Inz_Fn</a>
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Wykres">Wykres</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -25,10 +28,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Stock
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu text-white" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
                             </ul>
@@ -37,7 +40,7 @@
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Your Stocks
                                 </a>
@@ -53,10 +56,11 @@
                                 </ul>
                             </li>
                         }
+
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Manage
                                 </a>
@@ -64,14 +68,13 @@
                                     <a class="dropdown-item" asp-controller="Admin"
                                        asp-action="Users">Users</a>
                                     <a class="dropdown-item" asp-controller="Admin"
-                                       asp-action="ActiveStocks">Active Stocks</a>
+                                       asp-action="ListRoles">Roles</a>
                                 </ul>
                             </li>
                         }
 
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <!-- Dodajemy klasę ml-auto tutaj -->
                         <partial name="_LoginPartial" />
                     </ul>
                 </div>
@@ -79,7 +82,7 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="@(!isHomePage ? "container" : "")">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -87,7 +90,16 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Inz_Fn - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="d-flex justify-content-between">
+                <div>&copy; 2023/24</div>
+                <div>Wykonali: Jakub Budziński, Krzysztof Dąbrowski</div>
+                <div>Promotor pracy: Marcin Skoczylas</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Opis pracy</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Technologie</a>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

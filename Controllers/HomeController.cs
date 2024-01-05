@@ -17,6 +17,11 @@ namespace Inz_Fn.Controllers
         {
             return View();
         }
+
+        public IActionResult Wykres()
+        {
+            return View();
+        }
         public IActionResult PageNotFound()
         {
             return View();
