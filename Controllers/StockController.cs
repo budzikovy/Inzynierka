@@ -9,6 +9,7 @@ using Inz_Fn.Data;
 using Microsoft.AspNetCore.Identity;
 using Inz_Fn.Areas.Identity.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Inz_Fn.Controllers
 {
@@ -21,11 +22,15 @@ namespace Inz_Fn.Controllers
 
         private readonly UserManager<Inz_FnUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private IMemoryCache _memoryCache;
+        private const string StockTickersCacheKey = "StockTickersCacheKey";
 
-        public StockController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context)
+
+        public StockController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context, IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _context = context;
+            _memoryCache = memoryCache;
         }        
         
         [HttpPost("PurchaseStock")]
@@ -76,17 +81,11 @@ namespace Inz_Fn.Controllers
 
             return RedirectToAction("CurrentStocks", "User");
         }
-
         [HttpGet("Index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 20)
         {
-            // Użyj danych z modelu do pobrania danych giełdowych
             List<StockTickers> stockTickers = new List<StockTickers>();
             stockTickers = await GetGroupedDaily();
-<<<<<<< Updated upstream
-            return View("Index", stockTickers);
-        }
-=======
 
             // Logika paginacji
             var count = stockTickers.Count();
@@ -124,7 +123,6 @@ namespace Inz_Fn.Controllers
             };
             return View("Index2", model);
         }*/
->>>>>>> Stashed changes
 
         [HttpGet("Aggregate")]
         public async Task<IActionResult> Aggregate()
@@ -216,7 +214,7 @@ namespace Inz_Fn.Controllers
             string from = model.from.ToString("yyyy-MM-dd");
             string to = model.to.ToString("yyyy-MM-dd");
             string apiUrl = $"https://api.polygon.io/v2/aggs/ticker/{symbol}/range/{multiplier}/{timespan}/{from}/{to}?apiKey={apiKey}";
-
+            Console.WriteLine(apiUrl);
             using HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(apiUrl);
 
@@ -287,31 +285,12 @@ namespace Inz_Fn.Controllers
         }
         private async Task<List<StockTickers>> GetGroupedDaily()
         {
-            string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-            string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2023-01-09?adjusted=true&apiKey={apiKey}";
-
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-            if (response.IsSuccessStatusCode)
+            if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
             {
-                string content = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(content);
-                JToken results = json["results"];
-
-                List<StockTickers> stockTickers = new List<StockTickers>();
-                foreach (JToken result in results)
-                {
-                    StockTickers stockTicker = result.ToObject<StockTickers>();
-                    stockTickers.Add(stockTicker);
-                }
-                return stockTickers;
+                return cachedStockTickers;
             }
             else
             {
-<<<<<<< Updated upstream
-                throw new Exception($"Error: {response.StatusCode}");
-=======
                 // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
                 string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
                 string date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
@@ -344,7 +323,6 @@ namespace Inz_Fn.Controllers
                 {
                     throw new Exception($"Error: {response.StatusCode}");
                 }
->>>>>>> Stashed changes
             }
         }
         /*private async Task<List<StockData>> GetStockData()

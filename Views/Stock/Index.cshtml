@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Inz_Fn.Models.StockTickers>
+﻿@model Inz_Fn.Models.StockTickersViewModel
+
+
+
 
 @{
     ViewData["Title"] = "Index";
@@ -10,50 +13,28 @@
     <thead>
         <tr>
             <th>
-<<<<<<< Updated upstream
-                @Html.DisplayNameFor(model => model.T)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.c)
-=======
                 Ticker
             </th>
             <th>
                 Close Price
->>>>>>> Stashed changes
+
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.h)
+                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().h)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.l)
+                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().l)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.n)
+                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().n)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.o)
+                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().o)
             </th>
-<<<<<<< Updated upstream
-            <th>
-                @Html.DisplayNameFor(model => model.otc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.t)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.v)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.vw)
-            </th>
-=======
->>>>>>> Stashed changes
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.StockTickers) {
         <tr>
             <td>
                     <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">@Html.DisplayFor(modelItem => item.T)</a>
@@ -77,12 +58,11 @@
 }
     </tbody>
 </table>
-<<<<<<< Updated upstream
-=======
 <div>
     @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
     {
         if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
+
         {
             if (i == Model.Pagination.CurrentPage)
             {
@@ -96,4 +76,3 @@
         
     }
 </div>
->>>>>>> Stashed changes
