@@ -31,13 +31,13 @@ namespace Inz_Fn.Controllers
             _userManager = userManager;
             _context = context;
             _memoryCache = memoryCache;
-        }        
-        
+        }
+
         [HttpPost("PurchaseStock")]
         public async Task<IActionResult> PurchaseStock([FromForm] StockViewModel formStock)
         {
             string symbol = formStock.Stock_CIK;
-            double pricePerStock= formStock.Price_per_stock;
+            double pricePerStock = formStock.Price_per_stock;
             var model = new StockViewModel
             {
                 Stock_CIK = symbol,
@@ -85,8 +85,7 @@ namespace Inz_Fn.Controllers
         public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 20)
         {
             List<StockTickers> stockTickers = new List<StockTickers>();
-            stockTickers = await GetGroupedDaily();
-            // Logika paginacji
+            stockTickers = await GetGroupedDaily();// Logika paginacji
             var count = stockTickers.Count();
             var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             var model = new StockTickersViewModel
@@ -95,57 +94,18 @@ namespace Inz_Fn.Controllers
                 Pagination = new PaginationModel
                 {
                     CurrentPage = currentPage,
-                    ItemsPerPage = items.Count,
+                    ItemsPerPage = pageSize,
                     TotalItems = count
                 }
             };
-
             return View("Index", model);
-
         }
-            // Logika paginacji
-            var count = stockTickers.Count();
-            var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-            var model = new StockTickersViewModel
-            {
-                StockTickers = items,
-                Pagination = new PaginationModel
-                {
-                    CurrentPage = currentPage,
-                    ItemsPerPage = pageSize,
-                    TotalItems = count
-                }
-            };
-            return View("Index", model);
-        }/*
-        [HttpGet("Index2")]
-        public async Task<IActionResult> Index2(int currentPage = 1, int pageSize = 20)
-        {
-            List<StockData> stockData = new List<StockData>();
-            stockData = await GetStockData();
-
-            // Logika paginacji
-            var count = stockData.Count();
-            var items = stockData.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-            var model = new StockDataViewModel
-            {
-                StockData = items,
-                Pagination = new PaginationModel
-                {
-                    CurrentPage = currentPage,
-                    ItemsPerPage = pageSize,
-                    TotalItems = count
-                }
-            };
-            return View("Index2", model);
-        }*/
-
 
         [HttpGet("Aggregate")]
         public async Task<IActionResult> Aggregate()
         {
             // Pobierz dane z API
-            List<string> symbols =await GetStockTickers();
+            List<string> symbols = await GetStockTickers();
             List<string> timeUnits = new List<string>
             {
                 "minute",
@@ -169,7 +129,8 @@ namespace Inz_Fn.Controllers
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             TickDetails TickDetails = await GetTickerDetails(id);
             TickerPrevClose TickerPrevClose = await GetStockPreviousClose(id);
-            if (TickDetails.branding != null) {
+            if (TickDetails.branding != null)
+            {
                 if (TickDetails.branding.logo_url != null)
                 {
                     TickDetails.branding.logo_url += "?apiKey=" + apiKey;
@@ -179,10 +140,10 @@ namespace Inz_Fn.Controllers
                     TickDetails.branding.icon_url += "?apiKey=" + apiKey;
                 }
             }
-            
+
             TickerDetailsPrice tickerDetailsPrice = new TickerDetailsPrice
             {
-                tickDetails=TickDetails,
+                tickDetails = TickDetails,
                 tickerPrevClose = TickerPrevClose
             };
             return View(tickerDetailsPrice);
@@ -222,7 +183,7 @@ namespace Inz_Fn.Controllers
         }
 
 
-       private async Task<List<Stock_model>> GetStockData(AggregatesViewModel model)
+        private async Task<List<Stock_model>> GetStockData(AggregatesViewModel model)
         {
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             string symbol = model.symbol;
@@ -272,7 +233,7 @@ namespace Inz_Fn.Controllers
                 List<TickerPrevClose> tickersPrevClose = new List<TickerPrevClose>();
                 foreach (JToken result in results)
                 {
-                    TickerPrevClose tickerPrev= result.ToObject<TickerPrevClose>();
+                    TickerPrevClose tickerPrev = result.ToObject<TickerPrevClose>();
                     tickersPrevClose.Add(tickerPrev);
                 }
                 TickerPrevClose tickerPrevClose = new TickerPrevClose();
@@ -283,76 +244,36 @@ namespace Inz_Fn.Controllers
             {
                 throw new Exception($"Error: {response.StatusCode}");
             }
-/*
-            if (response.IsSuccessStatusCode)
-            {
-                string content = await response.Content.ReadAsStringAsync();
-                JObject json = JObject.Parse(content);
-                JToken results = json["results"];
-
-                TickerPrevClose tickerPrevClose = new TickerPrevClose();
-                tickerPrevClose = results.ToObject<TickerPrevClose>();
-                return tickerPrevClose;
-            }
-            else
-            {
-                throw new Exception($"Error: {response.StatusCode}");
-            }*/
 
         }
         private async Task<List<StockTickers>> GetGroupedDaily()
-{
-    if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
-    {
-        return cachedStockTickers;
-    }
-    else
-    {
-        // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
-        string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-        string date = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
-        string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
-
-        using HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync(apiUrl);
-
-        if (response.IsSuccessStatusCode)
         {
-            string content = await response.Content.ReadAsStringAsync();
-            JObject json = JObject.Parse(content);
-            JToken results = json["results"];
-
-            List<StockTickers> stockTickers = new List<StockTickers>();
-            foreach (JToken result in results)
+            if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
             {
-                StockTickers stockTicker = result.ToObject<StockTickers>();
-                stockTickers.Add(stockTicker);
-            }
-            stockTickers = stockTickers.OrderBy(x => x.T).ToList();
-
-
-            // Zapisz dane w pamięci podręcznej
-            _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
-
-            return stockTickers;
-        }
-        else
-        {
-            throw new Exception($"Error: {response.StatusCode}");
-        }
-    }
-}
-        /*private async Task<List<StockData>> GetStockData()
-        {
-            if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockData> cachedStockData))
-            {
-                return cachedStockData;
+                return cachedStockTickers;
             }
             else
             {
                 // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
                 string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-                string apiUrl = $"https://api.polygon.io/v3/reference/tickers?market=stocks&active=true&apiKey={apiKey}";
+                DateTime today = DateTime.Today;
+
+                // Sprawdź dzień tygodnia i przypisz odpowiednią wartość
+                int value;
+                if (today.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    value = 2;
+                }
+                else if (today.DayOfWeek == DayOfWeek.Sunday || today.DayOfWeek == DayOfWeek.Monday)
+                {
+                    value = 3;
+                }
+                else
+                {
+                    value = 1; 
+                }
+                string date = DateTime.Now.AddDays(-value).ToString("yyyy-MM-dd");
+                string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
 
                 using HttpClient client = new HttpClient();
                 HttpResponseMessage response = await client.GetAsync(apiUrl);
@@ -363,28 +284,29 @@ namespace Inz_Fn.Controllers
                     JObject json = JObject.Parse(content);
                     JToken results = json["results"];
 
-                    List<StockData> stocksData = new List<StockData>();
+                    List<StockTickers> stockTickers = new List<StockTickers>();
                     foreach (JToken result in results)
                     {
-                        StockData stockData = result.ToObject<StockData>();
-                        stocksData.Add(stockData);
+                        StockTickers stockTicker = result.ToObject<StockTickers>();
+                        stockTickers.Add(stockTicker);
                     }
-                    stocksData = stocksData.OrderBy(x => x.Ticker).ToList();
+                    stockTickers = stockTickers.OrderBy(x => x.T).ToList();
 
 
                     // Zapisz dane w pamięci podręcznej
-                    _memoryCache.Set(StockTickersCacheKey, stocksData, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
+                    _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
 
-                    return stocksData;
+                    return stockTickers;
                 }
                 else
                 {
                     throw new Exception($"Error: {response.StatusCode}");
                 }
             }
-        }*/
-        private async Task<List<string>> GetStockTickers() {
-            List<StockTickers> stockTickers= new List<StockTickers>();
+        }
+        private async Task<List<string>> GetStockTickers()
+        {
+            List<StockTickers> stockTickers = new List<StockTickers>();
             stockTickers = await GetGroupedDaily();
             List<string> symbols = new List<string>();
             foreach (StockTickers result in stockTickers)
