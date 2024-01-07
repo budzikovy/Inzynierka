@@ -129,6 +129,24 @@ namespace Inz_Fn.Controllers
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             TickDetails TickDetails = await GetTickerDetails(id);
             TickerPrevClose TickerPrevClose = await GetStockPreviousClose(id);
+            var model = new AggregatesViewModel {
+                symbol = id,
+                multiplier =1,
+                timespan = "day",
+                from = DateTime.Now.AddDays(-365),
+                to = DateTime.Now
+
+            };
+            var model2 = new AggregatesViewModel {
+                symbol = id,
+                multiplier =1,
+                timespan = "minute",
+                from = DateTime.Now.AddDays(-7),
+                to = DateTime.Now
+
+            };
+            List<Stock_model> StockModels = await GetStockData(model);
+            List<Stock_model> StockModels2 = await GetStockData(model2);
             if (TickDetails.branding != null)
             {
                 if (TickDetails.branding.logo_url != null)
@@ -144,7 +162,9 @@ namespace Inz_Fn.Controllers
             TickerDetailsPrice tickerDetailsPrice = new TickerDetailsPrice
             {
                 tickDetails = TickDetails,
-                tickerPrevClose = TickerPrevClose
+                tickerPrevClose = TickerPrevClose,
+                stockModels = StockModels,
+                stockModels2 = StockModels2
             };
             return View(tickerDetailsPrice);
         }
