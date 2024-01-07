@@ -9,6 +9,12 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<button id="toggleChartType" type="button">Toggle Chart Type</button>
+
+<div id="stockChartContainer" style="height: 400px; min-width: 310px"></div>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -76,3 +82,84 @@
 }
     </tbody>
 </table>
+
+
+<script type="text/javascript">
+    $(function () {
+        var data = @Html.Raw(Json.Serialize(Model));
+        var ohlc = [], volume = [];
+
+        for (var i = 0; i < data.length; i++) {
+            ohlc.push([
+                data[i].t,
+                data[i].o,
+                data[i].h,
+                data[i].l,
+                data[i].c
+            ]);
+
+            volume.push([
+                data[i].t,
+                data[i].v
+            ]);
+        }
+
+        var chart = Highcharts.stockChart('stockChartContainer', {
+            rangeSelector: {
+                selected: 1
+            },
+
+            title: {
+                text: 'Stock Price'
+            },
+
+            yAxis: [{
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'OHLC'
+                },
+                height: '60%',
+                lineWidth: 2
+            }, {
+                labels: {
+                    align: 'right',
+                    x: -3
+                },
+                title: {
+                    text: 'Volume'
+                },
+                top: '65%',
+                height: '35%',
+                offset: 0,
+                lineWidth: 2
+            }],
+
+            series: [{
+                type: 'candlestick',
+                name: 'Stock Price',
+                data: ohlc
+            }, {
+                type: 'column',
+                name: 'Volume',
+                data: volume,
+                yAxis: 1
+            }]
+        });
+
+        $('#toggleChartType').click(function () {
+            var series = chart.series[0];
+            if (series.type === 'candlestick') {
+                series.update({
+                    type: 'line'
+                });
+            } else {
+                series.update({
+                    type: 'candlestick'
+                });
+            }
+        });
+    });
+</script>

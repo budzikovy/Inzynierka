@@ -10,17 +10,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Inz_Fn</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inz_Fn.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins" />
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 </head>
 <body>
     <header class="sticky-top">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow @(isHomePage ? "" : "mb-5")">
             <div class="container d-flex">
                 <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Inz_Fn</a>
-                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Wykres">Wykres</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -31,9 +34,9 @@
                             <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Stock
                             </a>
-                            <ul class="dropdown-menu text-white" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
+                            <ul class="dropdown-menu text-white bg-black" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item text-white" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
+                                <li><a class="dropdown-item text-white" asp-area="" asp-controller="Stock" asp-action="Aggregate">Aggregate</a></li>
                             </ul>
                         </li>
 
@@ -91,14 +94,9 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             <div class="d-flex justify-content-between">
-                <div>&copy; 2023/24</div>
-                <div>Wykonali: Jakub Budziński, Krzysztof Dąbrowski</div>
-                <div>Promotor pracy: Marcin Skoczylas</div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Opis pracy</a>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Technologie</a>
+                <div>
+                    &copy; 2023/24 <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
             </div>
         </div>
     </footer>
