@@ -1,71 +1,356 @@
-﻿@model IEnumerable<Inz_Fn.Models.StockHistory>
+﻿@model Inz_Fn.Models.StatiscticStockViewModel
 
-<h1>StockHistory</h1>
+<h1>User Portfolio</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+        </div>
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Pozycja</th>
+                        <th>Wartość</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Łączna liczba kupionych akcji</td>
+                        <td>@Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount)</td>
+                    </tr>
+                    <tr>
+                        <td>Łączna liczba sprzedancyh akcji</td>
+                        <td>@Model.All.Where(x => x.Type_of_action == "sale").Sum(x => x.Amount)</td>
+                    </tr>
+                    <tr>
+                        <td>Średnia cena kupionej akcji</td>
+                        <td>@Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b)</td>
+                    </tr>
+                    <tr>
+                        <td>Średnia cena sprzedanej akcji</td>
+                        <td>@Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s)</td>
+                    </tr>
+                    <tr>
+                        <td>Łączny zysk</td>
+                        <td>@Model.All.Sum(x => x.Income)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="tab">
+    <button type="button" class="btn btn-secondary btn-lg" onclick="changeView(event, 'Bought')" id="defaultOpen">Bought</button>
+    <button type="button" class="btn btn-secondary btn-lg" onclick="changeView(event, 'Sold')">Sold</button>
+    <button type="button" class="btn btn-secondary btn-lg" onclick="location.href='@Url.Action("CurrentStocks", "User")'">Active</button>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Stock_CIK)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User_Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type_of_action)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price_per_stock_b)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price_per_stock_s)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Income)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock_CIK)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User_Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type_of_action)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price_per_stock_b)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price_per_stock_s)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Income)
-            </td>
-        </tr>
+</div>
+<p></p>
+<div id="Bought" class="tabcontent">
+    <table class="table table-dark" id="myTable">
+        <thead>
+            <tr>
+                <th scope="col" onclick="sortTable(0)">
+                    Ticker
+                </th>
+                <th scope="col" onclick="sortTable(1)">
+                    Price
+                </th>
+                <th scope="col" onclick="sortTable(2)">
+                    Date of purchase
+                </th>
+                <th scope="col" onclick="sortTable(3)">
+                    Amount
+                </th>
+                <th scope="col" onclick="sortTable(4)">
+                    Invested Sum
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StockHistB)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Stock_CIK)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @(item.Price_per_stock_b * item.Amount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="container-fluid">
+        <div class="col">
+            <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
+        </div>
+    </div>
+</div>
+
+<div id="Sold" class="tabcontent">
+    <table class="table table-hover table-dark" id="myTable2">
+        <thead>
+            <tr>
+                <th scope="col" onclick="sortTable2(0)">
+                    Ticker
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Price
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Date of purchase
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Ammount
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Invested Sum
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Sale price
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Sale date
+                </th>
+                <th scope="col" onclick="sortTable2(0)">
+                    Income
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StockHistS)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Stock_CIK)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @(item.Price_per_stock_b * item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price_per_stock_s)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SellDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Income)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="container-fluid">
+        <div class="col">
+            <canvas id="myChart3" style="width:100%;max-width:600px"></canvas>
+        </div>
+    </div>
+</div>
+@{
+    var groupedData = Model.StockHistB
+        .GroupBy(x => x.Stock_CIK)
+        .Select(group => new
+        {
+            Stock_CIK = group.Key,
+            TotalAmount = group.Sum(x => x.Amount)
+        })
+        .ToList();
 }
-    </tbody>
-</table>
+@{
+    var groupedData2 = Model.All
+        .GroupBy(x => x.Stock_CIK)
+        .Select(group => new
+        {
+            Stock_CIK = group.Key,
+            SoldAmount = group.Where(x => x.Type_of_action == "sale").Sum(x => x.Amount),
+            PurchaseAmount = group.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount)
+        })
+        .ToList();
+}
+<script>
+
+    function changeView(evt, action) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(action).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    const xValues = ["Bought", "Sold", "Active"];
+    const yValues = [@Model.StockHistB.Sum(x=>x.Amount), @Model.StockHistS.Sum(x=>x.Amount), @Model.Active.Sum(x=>x.Amount)];
+    const barColors = [
+        "#161618",
+        "#818181"
+    ];
+
+    new Chart("myChart", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "The distribution of your stocks"
+            }
+        }
+    });
+    let Stock_Cik = @Html.Raw(Json.Serialize(groupedData.Select(x => x.Stock_CIK)));
+    let Stock_Amount = @Html.Raw(Json.Serialize(groupedData.Select(x => x.TotalAmount)));
+
+    const barColors2 = ["darkgrey"];
+    new Chart("myChart2", {
+        type: "bar",
+        data: {
+            labels: Stock_Cik,
+            datasets: [{
+                backgroundColor: barColors2,
+                data: Stock_Amount
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "World Wine Production 2018"
+            }
+        }
+    });
+
+    let Stock_Tickers = @Html.Raw(Json.Serialize(groupedData2.Select(x => x.Stock_CIK)));
+    let Stock_AmountP = @Html.Raw(Json.Serialize(groupedData2.Select(x => x.PurchaseAmount)));
+    let Stock_AmountS = @Html.Raw(Json.Serialize(groupedData2.Select(x => x.SoldAmount)));
+    new Chart("myChart3", {
+        type: "bar",
+        data: {
+            labels: Stock_Cik,
+            datasets: [{
+                label: 'Bought',
+                backgroundColor: "darkgrey",
+                data: Stock_AmountP
+            },{
+
+                label: 'Sold',
+                backgroundColor: "lightgrey",
+                data: Stock_AmountS
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: {
+                    fontColor: 'grey' // zmienia kolor tekstu legendy na czerwony
+                }
+            },
+            title: {
+                display: true,
+                text: "Comparison of activities on shares"
+            }
+        }
+    });
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    function sortTable2(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

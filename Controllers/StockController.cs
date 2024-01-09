@@ -288,6 +288,10 @@ namespace Inz_Fn.Controllers
                 {
                     value = 3;
                 }
+                else if (today.DayOfWeek == DayOfWeek.Tuesday)
+                {
+                    value = 4;
+                }
                 else
                 {
                     value = 1;

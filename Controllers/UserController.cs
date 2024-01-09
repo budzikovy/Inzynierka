@@ -4,6 +4,7 @@ using Inz_Fn.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using ServiceStack;
 
 namespace Inz_Fn.Controllers
 {
@@ -145,8 +146,18 @@ namespace Inz_Fn.Controllers
                 return Challenge(); // Prompt the user to log in if not already
             }
 
-            var userStocks = _context.StocksHistory.Where(s => s.User_Id == currentUser.Id).ToList();
-            return View(userStocks);
+            var userStocksB = _context.StocksHistory.Where(s => s.User_Id == currentUser.Id).Where(x=>x.Type_of_action=="purchase").ToList();
+            var userStocksS = _context.StocksHistory.Where(s => s.User_Id == currentUser.Id).Where(x=>x.Type_of_action=="sale").ToList();
+            var userStocksAll = _context.StocksHistory.Where(s => s.User_Id == currentUser.Id).ToList();
+            var activeStocks = _context.Stock.Where(s => s.User_Id == currentUser.Id).ToList();
+            var model = new StatiscticStockViewModel
+            {
+                StockHistB = userStocksB,
+                StockHistS = userStocksS,
+                All = userStocksAll,
+                Active = activeStocks
+            };
+            return View(model);
         }
     }
 }
