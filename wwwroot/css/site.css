@@ -21,12 +21,11 @@ body {
 
 .full-height {
     height: 100vh;
-    border: 1px solid #ccc;
+    max-height:100%;
 }
 
 .full-height-first {
-    height: calc(100vh - 80px);
-    border: 1px solid #ccc;
+    height: calc(100vh - 55px);
 }
 
 .empty-blocks {
@@ -37,4 +36,29 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000; /* Gwarantuje, ¿e bêdzie na wierzchu innych elementów */
+}
+
+.full-height-first img {
+height:100%
+}
+
+.full-image img{
+    max-width:100%;
+}
+
+.full-image-lib img {
+    max-width: 100%;
+    max-height: 40%;
+}
+
+
+/* Styl dla urz¹dzeñ o szerokoœci ekranu md i wiêkszych */
+@media (min-width: 768px) { /* 768px to typowy punkt graniczny dla urz¹dzeñ md */
+    .full-height {
+        flex-direction: row;
+    }
+
+        .full-height > div {
+            width: 50%; /* Ka¿dy blok zajmuje 50% szerokoœci na urz¹dzeniach md i wiêkszych */
+        }
 }
