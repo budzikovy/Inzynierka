@@ -288,7 +288,7 @@ namespace Inz_Fn.Controllers
                 {
                     value = 3;
                 }
-                else if (today.DayOfWeek == DayOfWeek.Tuesday)
+                else if (today.DayOfWeek == DayOfWeek.Tuesday && today.Hour < 11) 
                 {
                     value = 4;
                 }

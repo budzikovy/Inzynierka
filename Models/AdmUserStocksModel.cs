@@ -10,7 +10,6 @@ namespace Inz_Fn.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        public AdmStatHitsModel AdmStatHitsModel { get; set; }
-        public AdmStatModel AdmStatModel { get; set; }
+        public StatiscticStockViewModel StatiscticStock { get; set;}
     }
 }

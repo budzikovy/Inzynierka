@@ -245,21 +245,30 @@ namespace Inz_Fn.Controllers
 
         public async Task<IActionResult> UserStocks(string UserId)
         {
-            Console.WriteLine("maciek");
-            Console.WriteLine(UserId);
-            Console.WriteLine("maciek");
-            
             var user = await _userManager.FindByIdAsync(UserId);
             if (user == null)
             {
-                Console.WriteLine("a tut tez");
                 ViewBag.ErrorMessage = $"User with Id = {UserId} cannot be found";
                 return View("NotFound");
             }
-            Console.WriteLine("a tut  juz tez");
-            var allStocks = _context.Stock.Where(x => x.User_Id == UserId).Sum(x => x.Amount);
-            var activeStocks = _context.Stock.Where(x => x.User_Id == UserId).ToList();
-            var sum = 0.00;
+            var userStocksB = _context.StocksHistory.Where(x=>x.User_Id==user.Id).Where(x => x.Type_of_action == "purchase").ToList();
+            var userStocksS = _context.StocksHistory.Where(x => x.User_Id == user.Id).Where(x => x.Type_of_action == "sale").ToList();
+            var userStocksAll = _context.StocksHistory.Where(x => x.User_Id == user.Id).ToList();
+            var activeStocks = _context.Stock.Where(x => x.User_Id == user.Id).ToList();
+            var Stat = new StatiscticStockViewModel
+            {
+                StockHistB = userStocksB,
+                StockHistS = userStocksS,
+                All = userStocksAll,
+                Active = activeStocks
+            };
+            var model = new AdmUserStocksModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                StatiscticStock = Stat
+            };
+            /*var sum = 0.00;
             foreach (var stock in activeStocks)
             {
                 sum += Math.Round(stock.Price_per_stock * stock.Amount, 2);
@@ -293,7 +302,62 @@ namespace Inz_Fn.Controllers
                 AdmStatHitsModel = admStockHis,
                 AdmStatModel = admStock
 
+            };*/
+            return View(model);
+        }
+        public IActionResult Statistics()
+        {
+
+            var userStocksB = _context.StocksHistory.Where(x => x.Type_of_action == "purchase").ToList();
+            var userStocksS = _context.StocksHistory.Where(x => x.Type_of_action == "sale").ToList();
+            var userStocksAll = _context.StocksHistory.ToList();
+            var activeStocks = _context.Stock.ToList();
+            var Stat = new StatiscticStockViewModel
+            {
+                StockHistB = userStocksB,
+                StockHistS = userStocksS,
+                All = userStocksAll,
+                Active = activeStocks
             };
+            var model = new AdmUserStocksModel
+            {
+                StatiscticStock = Stat
+            };
+            /*var sum = 0.00;
+            foreach (var stock in activeStocks)
+            {
+                sum += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+
+            var admStock = new AdmStatModel
+            {
+                averagePPS = sum / allStocks,
+                allStocks = allStocks,
+                investedSum = sum,
+                Stock = activeStocks
+            };
+            var allStocksH = _context.StocksHistory.Where(x => x.User_Id == UserId).Sum(x => x.Amount);
+            var activeStocksH = _context.StocksHistory.Where(x => x.User_Id == UserId).ToList();
+            var sumH = 0.00;
+            foreach (var stock in activeStocks)
+            {
+                sumH += Math.Round(stock.Price_per_stock * stock.Amount, 2);
+            }
+            var admStockHis = new AdmStatHitsModel 
+            {
+                averagePPS = sumH / allStocksH,
+                allStocks = allStocksH,
+                investedSum = sumH,
+                StockHist = activeStocksH
+            };
+            var model = new AdmUserStocksModel 
+            { 
+                Id = user.Id,
+                Email = user.Email,
+                AdmStatHitsModel = admStockHis,
+                AdmStatModel = admStock
+
+            };*/
             return View(model);
         }
     }

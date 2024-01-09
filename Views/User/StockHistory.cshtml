@@ -24,6 +24,14 @@
                         <td>@Model.All.Where(x => x.Type_of_action == "sale").Sum(x => x.Amount)</td>
                     </tr>
                     <tr>
+                        <td>Łączna suma zainwestowanych pieniędzy</td>
+                        <td>@Math.Round(Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount * x.Price_per_stock_b),2)</td>
+                    </tr>
+                    <tr>
+                        <td>Łączna wartość portfela(bazując na cenie zakupu)</td>
+                        <td>@Model.Active.Sum(x => x.Amount * x.Price_per_stock)</td>
+                    </tr>
+                    <tr>
                         <td>Średnia cena kupionej akcji</td>
                         <td>@Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b)</td>
                     </tr>
@@ -32,7 +40,7 @@
                         <td>@Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s)</td>
                     </tr>
                     <tr>
-                        <td>Łączny zysk</td>
+                        <td>Łączny zysk/strata</td>
                         <td>@Model.All.Sum(x => x.Income)</td>
                     </tr>
                 </tbody>
@@ -54,16 +62,16 @@
                 <th scope="col" onclick="sortTable(0)">
                     Ticker
                 </th>
-                <th scope="col" onclick="sortTable(1)">
+                <th scope="col" onclick="sortTablen(1)">
                     Price
                 </th>
                 <th scope="col" onclick="sortTable(2)">
                     Date of purchase
                 </th>
-                <th scope="col" onclick="sortTable(3)">
+                <th scope="col" onclick="sortTablen(3)">
                     Amount
                 </th>
-                <th scope="col" onclick="sortTable(4)">
+                <th scope="col" onclick="sortTablen(4)">
                     Invested Sum
                 </th>
             </tr>
@@ -85,7 +93,7 @@
                         @Html.DisplayFor(modelItem => item.Amount)
                     </td>
                     <td>
-                        @(item.Price_per_stock_b * item.Amount)
+                        @Math.Round((item.Price_per_stock_b * item.Amount), 2)
                     </td>
                 </tr>
             }
@@ -105,25 +113,25 @@
                 <th scope="col" onclick="sortTable2(0)">
                     Ticker
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2n(1)">
                     Price
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2(2)">
                     Date of purchase
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2n(3)">
                     Ammount
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2n(4)">
                     Invested Sum
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2n(5)">
                     Sale price
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2(6)">
                     Sale date
                 </th>
-                <th scope="col" onclick="sortTable2(0)">
+                <th scope="col" onclick="sortTable2n(7)">
                     Income
                 </th>
             </tr>
@@ -145,7 +153,7 @@
                         @Html.DisplayFor(modelItem => item.Amount)
                     </td>
                     <td>
-                        @(item.Price_per_stock_b * item.Amount)
+                        @Math.Round((item.Price_per_stock_b * item.Amount), 2)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Price_per_stock_s)
@@ -245,7 +253,7 @@
             legend: { display: false },
             title: {
                 display: true,
-                text: "World Wine Production 2018"
+                text: "Bought Stocks"
             }
         }
     });
@@ -281,7 +289,7 @@
             }
         }
     });
-    function sortTable(n) {
+    function sortTablen(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("myTable");
         switching = true;
@@ -317,6 +325,7 @@
             }
         }
     }
+    
     function sortTable2(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("myTable2");
@@ -336,6 +345,80 @@
                     }
                 } else if (dir == "desc") {
                     if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    function sortTablen(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    function sortTable2n(n) {
+        console.log("maczek")
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
                         shouldSwitch = true;
                         break;
                     }
