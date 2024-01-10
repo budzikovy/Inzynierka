@@ -2,39 +2,74 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="full-height-first text-white" style="position: relative;">
-    <div class="d-flex flex-column" style="position: absolute; top: 10%; left: 10%; z-index: 1;">
-        <h1 class="fw-bold">TRADE</h1>
+<div class="py-5 d-flex flex-column flex-md-row align-items-center justify-content-around container">
+    <div class="pe-md-5 d-md-flex align-items-center justify-content-center">
+        <img src="~/images/png/tradeanalytix.png" class="img-fluid"/>
     </div>
-    <img src="~/images/png/indeximage.png" class="w-100 mh-100" />
-</div>
-
-<div class="full-height container d-flex flex-column text-center text-md-start pt-5 flex-md-row">
-    <div class="d-flex flex-column justify-content-center">
-        <div class="fs-1 fw-bold mb-4">Po co jesteśmy?</div>
-        <div class="fs-5 md-mx-5 px-5 px-md-0">Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
-    </div>
-    <div class="d-flex justify-content-center align-items-center full-image h-100 ms-md-5">
-        <img src="~/images/png/tradeanalytix.png"/>
-    </div>
-</div>
-
-<div class="full-height container d-flex flex-column text-center text-md-start flex-md-row-reverse">
-    <div class="d-flex flex-column justify-content-center">
-        <div class="fs-1 fw-bold mb-4">Highcharts</div>
-        <div class="fs-5 md-mx-5 px-5 px-md-0">Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
-    </div>
-    <div class="d-flex justify-content-center align-items-center full-image-lib h-100 me-md-5">
-        <img src="~/images/png/highcharts.png"/>
+    <div class="index-text">
+        <div class="font-1 fw-bold">Po co jesteśmy?</div>
+        <div class="font-2 my-3"> Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
+        <form class="sign-up-form">
+            <div class="form-group">
+                <input type="email" class="form-control" placeholder="Adres e-mail">
+            </div>
+            <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register">Zacznij już teraz</a>
+        </form>
+        <div class="font-3"> Zarejestruj się aby inwestować i analizować od zaraz</div>
     </div>
 </div>
 
-<div class="full-height container d-flex flex-column text-center text-md-start flex-md-row">
-    <div class="d-flex flex-column justify-content-center">
-        <div class="fs-1 fw-bold mb-4">Polygon.io</div>
-        <div class="fs-5 md-mx-5 px-5 px-md-0">Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
+
+<div class="container text-center py-3">
+    <h2>Co oferujemy?</h2>
+    <div class="row">
+        <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+            <div class="icon-box flex-column d-flex flex-grow-1">
+                <span class="fas fa-chart-line"></span>
+                <h3 class="fw-bold">Analiza</h3>
+                <p>Pomagamy w dogłębnej analizie cen akcji na rynku w czasie rzeczywistym.</p>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+            <div class="icon-box flex-column d-flex flex-grow-1">
+                <span class="fas fa-briefcase"></span>
+                <h3 class="fw-bold">Portfolio</h3>
+                <p>Umożliwiamy przegląd twoich inwestycji, aby informować cię o stratach i zyskach.</p>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+            <div class="icon-box flex-column d-flex flex-grow-1">
+                <span class="fas fa-globe"></span>
+                <h3 class="fw-bold">Wirtualne inwestowanie</h3>
+                <p>Możesz inwestować wirtualną walutę, aby się sprawdzić lub testować strategie.</p>
+            </div>
+        </div>
     </div>
-    <div class="d-flex justify-content-center align-items-center full-image-lib h-100 ms-md-5">
-        <img src="~/images/png/polygonio.png" />
+    <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register">Dowiedz się więcej: czym, po co i dla kogo jest nasza strona</a>
+
+</div>
+
+
+<div class="padding-t d-flex flex-column-reverse flex-md-row-reverse align-items-center justify-content-around container">
+    <div class="d-md-flex align-items-center justify-content-center">
+        <img src="~/images/png/highcharts.png" class="img-fluid img-fluid-convert" />
+    </div>
+    <div class="index-text">
+        <div class="font-1 fw-bold">Highcharts</div>
+        <div class="font-2 my-3">
+            Użyliśmy biblioteki Highcharts w naszym projekcie. Jej elastyczność, łatwość użycia i zaawansowane funkcje znacznie przyspieszyły i ułatwiły proces tworzenia interaktywnych wykresów. Jesteśmy przekonani, że dzięki Highcharts nasza strona jest bardziej atrakcyjna i użyteczna dla użytkowników.
+        </div>
+    </div>
+</div>
+
+<div class="padding-t d-flex flex-column-reverse flex-md-row align-items-center justify-content-around container">
+    <div class="d-md-flex align-items-center justify-content-center">
+        <img src="~/images/png/polygon.png" class="img-fluid img-fluid-convert" />
+    </div>
+    <div class="index-text">
+        <div class="font-1 fw-bold">Polygon.io</div>
+        <div class="font-2 my-3">
+            Skorzystaliśmy również z API Polygon.io. Dzięki darmowemu dostępowi do danych, mogliśmy skupić się na realizacji projektów, nie martwiąc się o koszty. API okazało się niezwykle intuicyjne i łatwe w użyciu.
+        </div>
     </div>
 </div>
