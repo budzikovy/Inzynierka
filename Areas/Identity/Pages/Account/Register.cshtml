@@ -62,4 +62,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        window.onload = function () {
+            var email = localStorage.getItem('email');
+            if (email) {
+                document.getElementById('Input_Email').value = email;
+                localStorage.removeItem('email'); // clear the email from storage
+            }
+        }
+    </script>
+
 }

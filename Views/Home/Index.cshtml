@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Inz_Fn.Areas.Identity.Data.Inz_FnUser> SignInManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -9,13 +12,17 @@
     <div class="index-text">
         <div class="font-1 fw-bold">Po co jesteśmy?</div>
         <div class="font-2 my-3"> Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
-        <form class="sign-up-form">
-            <div class="form-group">
-                <input type="email" class="form-control" placeholder="Adres e-mail">
-            </div>
-            <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register">Zacznij już teraz</a>
-        </form>
-        <div class="font-3"> Zarejestruj się aby inwestować i analizować od zaraz</div>
+        @if (!SignInManager.IsSignedIn(User)){
+            <form class="sign-up-form">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="emailInput" placeholder="Adres e-mail">
+                </div>
+                <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register" onclick="storeEmail()">Zacznij już teraz</a>
+            </form>
+
+            <div class="font-3"> Zarejestruj się aby inwestować i analizować od zaraz</div>
+        }
+
     </div>
 </div>
 
@@ -45,8 +52,7 @@
             </div>
         </div>
     </div>
-    <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register">Dowiedz się więcej: czym, po co i dla kogo jest nasza strona</a>
-
+    <a class="btn btn-primary blue-button my-3 form-control" asp-area="" asp-controller="Home" asp-action="Privacy">Dowiedz się więcej: czym, po co i dla kogo jest nasza strona</a>
 </div>
 
 
@@ -62,7 +68,7 @@
     </div>
 </div>
 
-<div class="padding-t d-flex flex-column-reverse flex-md-row align-items-center justify-content-around container">
+<div class="padding-t d-flex flex-column-reverse flex-md-row align-items-center justify-content-around container mb-5">
     <div class="d-md-flex align-items-center justify-content-center">
         <img src="~/images/png/polygon.png" class="img-fluid img-fluid-convert" />
     </div>
@@ -73,3 +79,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    function storeEmail() {
+        var email = document.getElementById('emailInput').value;
+        localStorage.setItem('email', email);
+    }
+</script>

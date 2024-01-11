@@ -23,28 +23,23 @@
 </head>
 <body>
     <header class="sticky-top">
-        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-black border-bottom box-shadow @(isHomePage ? "" : "mb-5")">
+        <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-blue border-bottom box-shadow @(isHomePage ? "" : "mb-5")">
             <div class="container d-flex">
                 <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/png/logoicon.png" width="50px" height="50px" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <img src="~/images/icons/navbaricon.svg" width="40px"/>
                 </button>
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Stock
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a></li>
-                            </ul>
+                        <li class="nav-item blue-hover">
+                            <a class="nav-link text-white cubic-md" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a>
                         </li>
 
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white blue-hover" href="#" id="navbarDropdownMenuLink" role="button"
+                                <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Your Stocks
                                 </a>
@@ -60,7 +55,7 @@
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-white blue-hover" href="#" id="navbarDropdownMenuLink" role="button"
+                                <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Manage
                                 </a>
@@ -90,9 +85,11 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-                    &copy; 2023/24 <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer text-muted bg-blue py-3 text-wrap">
+        <div class="container text-white">
+            <b>Wykonali: </b>Jakub Budziński, Krzysztof Dąbrowski<br />
+            <b>Promotor: </b>Dr. Marcin Skoczylas<br />
+            <b>&copy; 2023/24 Praca powstała na wydziale Informatyki Politechniki Białostockiej</b>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

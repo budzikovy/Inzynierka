@@ -82,21 +82,35 @@ namespace Inz_Fn.Controllers
             return RedirectToAction("CurrentStocks", "User");
         }
         [HttpGet("Index")]
-        public async Task<IActionResult> Index(int currentPage = 1, int pageSize = 20)
+        public async Task<IActionResult> Index(string? searchString, int currentPage = 1, int pageSize = 20)
         {
+
             List<StockTickers> stockTickers = new List<StockTickers>();
-            stockTickers = await GetGroupedDaily();// Logika paginacji
+            stockTickers = await GetGroupedDaily();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                stockTickers = stockTickers.Where(s => s.T.Contains(searchString)).ToList();
+            }
+            List<string> stockstr = new List<string>();
+            foreach (var stock in stockTickers)
+            {
+                stockstr.Add(stock.T);
+            }
             var count = stockTickers.Count();
             var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             var model = new StockTickersViewModel
             {
                 StockTickers = items,
+                StockTickerCIK = stockstr,
                 Pagination = new PaginationModel
                 {
                     CurrentPage = currentPage,
                     ItemsPerPage = pageSize,
-                    TotalItems = count
-                }
+                    TotalItems = count,
+                },
+                searchStr = searchString
+
             };
             return View("Index", model);
         }
@@ -296,6 +310,12 @@ namespace Inz_Fn.Controllers
                 {
                     value = 1;
                 }
+
+                if (today.Hour < 10)
+                {
+                    value +=1;
+                }
+
                 string date = DateTime.Now.AddDays(-value).ToString("yyyy-MM-dd");
                 string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
 
