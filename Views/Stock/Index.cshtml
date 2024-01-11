@@ -59,8 +59,9 @@
                 @Html.DisplayFor(modelItem => item.n)
             </td>
             <td>
-                <button type="button" class="btn btn-outline-primary" asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T">Zobacz</button>
-            </td>
+                    <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn btn-outline-primary" role="button">Zobacz</a>
+
+                </td>
         </tr>
 }
     </tbody>
