@@ -57,6 +57,7 @@ namespace Inz_Fn.Controllers
                 Id = user.Id,
                 Email = user.Email,
                 UserName = user.UserName,
+                EmailConfirmed = user.EmailConfirmed,
                 Roles = userRoles
             };
             //Pass the Model to the View

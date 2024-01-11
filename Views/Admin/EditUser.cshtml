@@ -28,7 +28,7 @@
     <div class="form-group row">
         <label asp-for="EmailConfirmed" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
-            <input asp-for="EmailConfirmed"  type="checkbox" />
+            <input asp-for="EmailConfirmed" type="checkbox" checked="@Model.EmailConfirmed" />
             <span asp-validation-for="EmailConfirmed" class="text-danger"></span>
         </div>
     </div>
