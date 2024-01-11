@@ -25,6 +25,10 @@ body {
 }
 
 
+.fmb-md{
+    margin-bottom: 10rem;
+}
+
 .full-height {
    min-height: calc(100vh - 255px);
 }
