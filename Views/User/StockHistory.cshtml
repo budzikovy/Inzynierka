@@ -162,8 +162,9 @@
                         @Html.DisplayFor(modelItem => item.SellDate)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Income)
+                        <span class="@(item.Income > 0 ? "gain" : item.Income < 0 ? "loss" : "")">@Html.DisplayFor(modelItem => item.Income)</span>
                     </td>
+
                 </tr>
             }
         </tbody>

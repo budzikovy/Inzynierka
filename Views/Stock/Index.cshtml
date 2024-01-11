@@ -14,7 +14,7 @@
     <input type="submit" value="Szukaj" />
 </form>
 
-<table class="table table-bordered table-primary">
+<table class="table table-blue">
     <thead>
         <tr>
             <th scope="col">
@@ -31,6 +31,8 @@
             <th scope="col">
                 Liczba trasnsakcji
             </th>
+            <th scope="col">
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -42,16 +44,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.c)
             </td>
-            <td>
-                    <span>@((item.c - item.o) / item.o*100) %</span>
-            </td>
+                <td>
+                    <span class="@(((item.c - item.o) / item.o*100) > 0 ? "gain" : ((item.c - item.o) / item.o*100) < 0 ? "loss" : "")">@((item.c - item.o) / item.o * 100) %</span>
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.n)
             </td>
 
                 <td>
-                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">@Html.DisplayFor(modelItem => item.T)</a>
-
+                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">
+                        <button class="btn">Zobacz</button>
+                    </a>
                 </td>
 
         </tr>
