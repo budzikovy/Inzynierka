@@ -86,11 +86,13 @@ namespace Inz_Fn.Controllers
             return RedirectToAction("CurrentStocks", "User");
         }
         [HttpGet("Index")]
-        public async Task<IActionResult> Index(string? searchString, int currentPage = 1, int pageSize = 20)
+        public async Task<IActionResult> Index(string? searchString, string? sort, string? sortOrder, int currentPage = 1, int pageSize = 20)
         {
-
             List<StockTickers> stockTickers = new List<StockTickers>();
             stockTickers = await GetGroupedDaily();
+
+            // Add sorting logic here
+            
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
@@ -101,6 +103,26 @@ namespace Inz_Fn.Controllers
             {
                 stockstr.Add(stock.T);
             }
+            if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "Symbol":
+                        stockTickers = sortOrder == "asc" ? stockTickers.OrderBy(s => s.T).ToList() : stockTickers.OrderByDescending(s => s.T).ToList();
+                        break;
+                    case "Cena":
+                        stockTickers = sortOrder == "asc" ? stockTickers.OrderBy(s => s.c).ToList() : stockTickers.OrderByDescending(s => s.c).ToList();
+                        break;
+                    case "Zmiana":
+                        stockTickers = sortOrder == "asc" ? stockTickers.OrderBy(s => s.dailyChange).ToList() : stockTickers.OrderByDescending(s => s.dailyChange).ToList();
+                        break;
+                    case "Transakcje":
+                        stockTickers = sortOrder == "asc" ? stockTickers.OrderBy(s => s.n).ToList() : stockTickers.OrderByDescending(s => s.n).ToList();
+                        break;
+                        // Dodaj przypadki dla innych kolumn
+                }
+            }
+            
             var count = stockTickers.Count();
             var items = stockTickers.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
             var model = new StockTickersViewModel
@@ -113,7 +135,9 @@ namespace Inz_Fn.Controllers
                     ItemsPerPage = pageSize,
                     TotalItems = count,
                 },
-                searchStr = searchString
+                searchStr = searchString,
+                sort = sort,
+                sortOrder = sortOrder
 
             };
             return View("Index", model);

@@ -7,31 +7,37 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>View</h1>
-
-<form asp-action="Index" method="get">
-    <input type="text" name="searchString" />
-    <input type="submit" value="Szukaj" />
-</form>
 
 <table class="table table-blue">
     <thead>
         <tr>
             <th scope="col">
-                Symbol
+                <a asp-action="Index" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Symbol
+                </a>
             </th>
             <th scope="col">
-                Cena
+                <a asp-action="Index" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Cena
+                </a>
 
             </th>
             <th scope="col">
-                Zmiana dobowa(%)
+                <a asp-action="Index" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Zmiana dobowa(%)
+                </a>
+            </th>
+            <th scope="col">
 
+                <a asp-action="Index" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Liczba trasnsakcji
+                </a>
             </th>
             <th scope="col">
-                Liczba trasnsakcji
-            </th>
-            <th scope="col">
+                <form asp-action="Index" method="get">
+                    <input type="text" name="searchString" />
+                    <button type="submit" class="btn btn-primary" value="Szukaj">Szukaj</button>
+                </form>
             </th>
         </tr>
     </thead>
@@ -44,24 +50,25 @@
             <td>
                 @Html.DisplayFor(modelItem => item.c)
             </td>
-                <td>
-                    <span class="@(((item.c - item.o) / item.o*100) > 0 ? "gain" : ((item.c - item.o) / item.o*100) < 0 ? "loss" : "")">@((item.c - item.o) / item.o * 100) %</span>
-                </td>
+            <td>
+                    <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
+                        @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                </span>
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.n)
             </td>
-
-                <td>
-                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">
-                        <button class="btn">Zobacz</button>
-                    </a>
-                </td>
-
+            <td>
+                <button type="button" class="btn btn-outline-primary" asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T">Zobacz</button>
+            </td>
         </tr>
 }
     </tbody>
 </table>
+
 <div>
+    <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")" href="@(Model.Pagination.CurrentPage > 1 ? Url.Action("Index", "Stock", new { currentPage = Model.Pagination.CurrentPage - 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">&lt;</a>
+
     @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
     {
         if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
@@ -69,15 +76,16 @@
         {
             if (i == Model.Pagination.CurrentPage)
             {
-                <span>@i</span>
+                <button type="button" class="btn btn-primary" disabled>@i</button>
             }
             else
             {
-                <a href="@Url.Action("Index", "Stock", new { currentPage = i,searchString = Model.searchStr  })">@i</a>
+                <a class="btn btn-primary" href="@Url.Action("Index", "Stock", new { currentPage = i,searchString = Model.searchStr,sort=Model.sort, sortOrder=Model.sortOrder })" role="button">@i</a>
             }
         }
         
     }
+    <a class="btn btn-primary @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")" href="@(Model.Pagination.CurrentPage<Model.Pagination.TotalPages ? Url.Action("Index", "Stock", new { currentPage = Model.Pagination.CurrentPage + 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">></a>
 </div>
 
 

@@ -82,11 +82,14 @@ body {
     background-color: #03429e;
     border-color: #03429e;
 }
+.btn-primary {
+    border-color: white;
+}
 
 
-    .blue-hover:hover {
-        font-weight: bold
-    }
+.blue-hover:hover {
+    font-weight: bold
+}
 
 .blue-hover-btn:hover {
     border: 3px solid white !important;
@@ -111,10 +114,10 @@ body {
     color: green;
 }
 
-    .table-blue thead {
-        background-color: #0052FF;
-        color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
-    }
+.table-blue thead {
+    background-color: #0D6EFD;
+    color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+}
 
     .table-blue tbody {
         background-color: white; /* Kolor niebieski z pierwszej linii */

@@ -22,6 +22,5 @@ namespace Inz_Fn.Models
         public DateTime Date { get; set; }
         [Required]
         public int Amount { get; set; }
-        public string Currency { get; internal set; }
     }
 }
