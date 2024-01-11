@@ -12,5 +12,19 @@
         public float t { get; set; }
         public float v { get; set; }
         public float vw { get; set; }
+        public float dailyChange
+        {
+            get
+            {
+                if (o != 0)
+                {
+                    return (c - o) / o * 100;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
     }
 }

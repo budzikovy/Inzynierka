@@ -17,9 +17,10 @@ namespace Inz_Fn.Models
         [Required]
         public double Price_per_stock { get; set; }
         [Required]
+        public string Currency {  get; set; }
+        [Required]
         public DateTime Date { get; set; }
         [Required]
         public int Amount { get; set; }
-        public string Currency { get; internal set; }
     }
 }
