@@ -29,6 +29,12 @@ body {
    min-height: calc(100vh - 255px);
 }
 
+.border-blue {
+    border: 2px solid #0052ff;
+    border-radius: 10px;
+    padding: 50px;
+}
+
 .sticky-top {
     position: sticky;
     top: 0;
@@ -97,6 +103,13 @@ body {
         font-weight: bold; /* Makes the text bold */
     }
 
+.loss {
+    color: red;
+}
+
+.gain {
+    color: green;
+}
 
     .table-blue thead {
         background-color: #0052FF;
@@ -104,8 +117,9 @@ body {
     }
 
     .table-blue tbody {
-        background-color: #0085FF; /* Kolor niebieski z pierwszej linii */
-        color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+        background-color: white; /* Kolor niebieski z pierwszej linii */
+        color: black; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+        border: 2px
     }
 
 .dropdown-item:focus, .dropdown-item:hover {

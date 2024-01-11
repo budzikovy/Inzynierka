@@ -24,5 +24,6 @@ namespace Inz_Fn.Models
         public int Amount { get; set; }
         public DateTime? SellDate { get; set; }
         public double? Income { get; set; }
+        public string Currency { get; internal set; }
     }
 }

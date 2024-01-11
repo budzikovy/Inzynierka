@@ -4,10 +4,9 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="full-height d-flex justify-content-center flex-column">
+    <div class="row justify-content-center">
+        <div class="col-md-4 border-blue text-center">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Create a new account.</h2>
             <hr />
@@ -29,35 +28,14 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Register</button>
         </form>
+
+            <p class="mt-3">
+                Masz już konto?
+                <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Zaloguj się</a>
+            </p>
+
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div class=" fs-2">
-                        Masz już konto?
-                    </div>
-                    <div class="">
-                        <a id="login" asp-area="Identity" asp-page="/Account/Login">Zaloguj się</a>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+</div>
 </div>
 
 @section Scripts {
