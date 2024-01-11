@@ -38,10 +38,12 @@ namespace Inz_Fn.Controllers
         {
             string symbol = formStock.Stock_CIK;
             double pricePerStock = formStock.Price_per_stock;
+            string currency = formStock.Currency;
             var model = new StockViewModel
             {
                 Stock_CIK = symbol,
-                Price_per_stock = pricePerStock
+                Price_per_stock = pricePerStock,
+                Currency = currency
             };
             return View(model);
         }
@@ -62,6 +64,7 @@ namespace Inz_Fn.Controllers
                 Stock_CIK = model.Stock_CIK,
                 User_Id = user.Id,
                 Price_per_stock = model.Price_per_stock,
+                Currency = model.Currency,
                 Date = DateTime.Now, // Ustawiamy aktualną datę, zakładając że to jest data transakcji
                 Amount = model.Amount
             };
@@ -71,6 +74,7 @@ namespace Inz_Fn.Controllers
                 User_Id = user.Id,
                 Type_of_action = "purchase",
                 Price_per_stock_b = model.Price_per_stock,
+                Currency = model.Currency,
                 Date = DateTime.Now, // Ustawiamy aktualną datę, zakładając że to jest data transakcji
                 Amount = model.Amount
             };
