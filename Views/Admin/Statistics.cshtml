@@ -28,19 +28,19 @@
                     </tr>
                     <tr>
                         <td>Łączna wartość portfela(bazując na cenie zakupu)</td>
-                        <td>@Model.StatiscticStock.Active.Sum(x => x.Amount * x.Price_per_stock)</td>
+                        <td>@Math.Round((decimal)Model.StatiscticStock.Active.Sum(x => x.Amount * x.Price_per_stock), 2)</td>
                     </tr>
                     <tr>
                         <td>Średnia cena kupionej akcji</td>
-                        <td>@Model.StatiscticStock.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b)</td>
+                        <td>@Math.Round((decimal)Model.StatiscticStock.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b), 2)</td>
                     </tr>
                     <tr>
                         <td>Średnia cena sprzedanej akcji</td>
-                        <td>@Model.StatiscticStock.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s)</td>
+                        <td>@Math.Round((decimal)Model.StatiscticStock.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s), 2)</td>
                     </tr>
                     <tr>
                         <td>Łączny zysk/strata</td>
-                        <td>@Model.StatiscticStock.All.Sum(x => x.Income)</td>
+                        <td>@Math.Round((decimal)Model.StatiscticStock.All.Sum(x => x.Income), 2)</td>
                     </tr>
                 </tbody>
             </table>
