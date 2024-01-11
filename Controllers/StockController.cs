@@ -290,7 +290,7 @@ namespace Inz_Fn.Controllers
             {
                 // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
                 string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
-                DateTime today = DateTime.Today;
+                DateTime today = DateTime.Now;
 
                 // Sprawdź dzień tygodnia i przypisz odpowiednią wartość
                 int value;
@@ -302,20 +302,16 @@ namespace Inz_Fn.Controllers
                 {
                     value = 3;
                 }
-                else if (today.DayOfWeek == DayOfWeek.Tuesday && today.Hour < 11) 
-                {
-                    value = 4;
-                }
                 else
                 {
                     value = 1;
+                    if (today.Hour < 10)
+                    {
+                            value += 1;
+                    }
                 }
-
-                if (today.Hour < 10)
-                {
-                    value +=1;
-                }
-
+                
+                Console.WriteLine(today.Hour);
                 string date = DateTime.Now.AddDays(-value).ToString("yyyy-MM-dd");
                 string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
 

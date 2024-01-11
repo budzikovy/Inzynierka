@@ -6,7 +6,6 @@
 
         public List<StockTickers> StockTickers { get; set; }
         public PaginationModel Pagination { get; set; }
-        public string SortOrder { get; set; }
         public List<string> StockTickerCIK { get; internal set; }
     }
 }

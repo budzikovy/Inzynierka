@@ -11,30 +11,25 @@
 
 <form asp-action="Index" method="get">
     <input type="text" name="searchString" />
-    <input type="submit" value="Search" />
+    <input type="submit" value="Szukaj" />
 </form>
 
-<table class="table">
+<table class="table table-bordered table-primary">
     <thead>
         <tr>
-            <th>
-                Ticker
+            <th scope="col">
+                Symbol
             </th>
-            <th>
-                Close Price
+            <th scope="col">
+                Cena
 
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().h)
+            <th scope="col">
+                Zmiana dobowa(%)
+
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().l)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().n)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockTickers.FirstOrDefault().o)
+            <th scope="col">
+                Liczba trasnsakcji
             </th>
         </tr>
     </thead>
@@ -42,23 +37,23 @@
 @foreach (var item in Model.StockTickers) {
         <tr>
             <td>
-                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">@Html.DisplayFor(modelItem => item.T)</a>
-                </td>
+                @Html.DisplayFor(modelItem => item.T)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.c)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.h)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.l)
+                    <span>@((item.c - item.o) / item.o*100) %</span>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.n)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.o)
-            </td>
+
+                <td>
+                    <a href="@Url.Action("TickerDetails", "Stock", new { id = item.T })">@Html.DisplayFor(modelItem => item.T)</a>
+
+                </td>
+
         </tr>
 }
     </tbody>
