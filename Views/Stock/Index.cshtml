@@ -1,13 +1,97 @@
 ﻿@model Inz_Fn.Models.StockTickersViewModel
-
-
-
-
 @{
     ViewData["Title"] = "Index";
 }
 
-
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <table class="table table-blue">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Symbol
+                        </th>
+                        <th scope="col">
+                           Wolumen
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.bigVol)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.T)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.v)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table class="table table-blue">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Symbol
+                        </th>
+                        <th scope="col">
+                            Największe zmiany(+)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.bigIncrease)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.T)
+                            </td>
+                            <td>
+                                <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
+                                    @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <table class="table table-blue">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Symbol
+                        </th>
+                        <th scope="col">
+                            Największe zmiany(-)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.bigLose)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.T)
+                            </td>
+                            <td>
+                                <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
+                                    @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <table class="table table-blue">
     <thead>
         <tr>
@@ -60,8 +144,19 @@
             </td>
             <td>
                     <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn btn-outline-primary" role="button">Zobacz</a>
-
-                </td>
+                    <form asp-action="PurchaseStock" method="post">
+                        <input type="hidden" name="Stock_CIK" value="@item.T" />
+                        <input type="hidden" name="Price_per_stock" value="@item.c" />
+                        <input type="hidden" name="Currency" value="usd" />
+                        <button type="submit" class="btn btn-primary">Kup teraz</button>
+                    </form>
+            </td>
+            <td>
+                    <form asp-action="AddToFavorites" asp-controller="Stock" method="get">
+                        <input type="hidden" name="stock_CIK" value="@item.T" />
+                        <button type="submit" @(item.isFavourtie == true ? "disabled" : "") class="btn btn-outline-primary">Add to Favorites</button>
+                    </form>
+            </td>
         </tr>
 }
     </tbody>

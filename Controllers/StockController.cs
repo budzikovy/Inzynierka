@@ -36,16 +36,54 @@ namespace Inz_Fn.Controllers
         [HttpPost("PurchaseStock")]
         public async Task<IActionResult> PurchaseStock([FromForm] StockViewModel formStock)
         {
+            string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
+            TickDetails TickDetails = await GetTickerDetails(formStock.Stock_CIK);
+            TickerPrevClose TickerPrevClose = await GetStockPreviousClose(formStock.Stock_CIK);
+            var model = new AggregatesViewModel
+            {
+                symbol = formStock.Stock_CIK,
+                multiplier = 1,
+                timespan = "day",
+                from = DateTime.Now.AddDays(-365),
+                to = DateTime.Now
+
+            };
+            var model2 = new AggregatesViewModel
+            {
+                symbol = formStock.Stock_CIK,
+                multiplier = 1,
+                timespan = "minute",
+                from = DateTime.Now.AddDays(-7),
+                to = DateTime.Now
+
+            };
+            List<Stock_model> StockModels = await GetStockData(model);
+            List<Stock_model> StockModels2 = await GetStockData(model2);
+            if (TickDetails.branding != null)
+            {
+                if (TickDetails.branding.logo_url != null)
+                {
+                    TickDetails.branding.logo_url += "?apiKey=" + apiKey;
+                }
+                if (TickDetails.branding.icon_url != null)
+                {
+                    TickDetails.branding.icon_url += "?apiKey=" + apiKey;
+                }
+            }
+
+            
             string symbol = formStock.Stock_CIK;
             double pricePerStock = formStock.Price_per_stock;
             string currency = formStock.Currency;
-            var model = new StockViewModel
+            var StockViewModelD = new StockBuyModel
             {
                 Stock_CIK = symbol,
                 Price_per_stock = pricePerStock,
-                Currency = currency
+                Currency = currency,
+                stockModels = StockModels,
+                stockModels2 = StockModels2
             };
-            return View(model);
+            return View(StockViewModelD);
         }
 
 
@@ -88,11 +126,20 @@ namespace Inz_Fn.Controllers
         [HttpGet("Index")]
         public async Task<IActionResult> Index(string? searchString, string? sort, string? sortOrder, int currentPage = 1, int pageSize = 20)
         {
+            var user = await _userManager.GetUserAsync(User);
+
             List<StockTickers> stockTickers = new List<StockTickers>();
+            List<StockTickers> stockInc = new List<StockTickers>();
+            List<StockTickers> stockVol = new List<StockTickers>();
+            List<StockTickers> stockLos = new List<StockTickers>();
             stockTickers = await GetGroupedDaily();
+            List<FavouriteStocks> favouriteStocks = _context.FavouriteStocks.Where(x => x.User_Id == user.Id).ToList();
+            stockInc = stockTickers.OrderByDescending(s => s.dailyChange).Take(3).ToList();
+            stockVol = stockTickers.OrderByDescending(s => s.v).Take(3).ToList();
+            stockLos = stockTickers.OrderBy(s => s.dailyChange).Take(3).ToList();
 
             // Add sorting logic here
-            
+
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToUpper();
@@ -101,6 +148,13 @@ namespace Inz_Fn.Controllers
             List<string> stockstr = new List<string>();
             foreach (var stock in stockTickers)
             {
+                if (favouriteStocks.Any(fs => fs.Stock_CIK == stock.T))
+                {
+                    stock.isFavourtie = true;
+                }
+                else {
+                    stock.isFavourtie = false;
+                }
                 stockstr.Add(stock.T);
             }
             if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sort))
@@ -137,7 +191,11 @@ namespace Inz_Fn.Controllers
                 },
                 searchStr = searchString,
                 sort = sort,
-                sortOrder = sortOrder
+                sortOrder = sortOrder,
+                Fav = favouriteStocks,
+                bigIncrease = stockInc,
+                bigLose = stockLos,
+                bigVol = stockVol
 
             };
             return View("Index", model);
@@ -210,6 +268,7 @@ namespace Inz_Fn.Controllers
             };
             return View(tickerDetailsPrice);
         }
+        
 
         private async Task<TickDetails> GetTickerDetails(string tck)
         {
@@ -384,6 +443,28 @@ namespace Inz_Fn.Controllers
             symbols.Sort(); // Sortowanie tickerów alfabetycznie
 
             return symbols;
+        }
+        [HttpGet]
+        public async Task<IActionResult> AddToFavorites(string? stock_CIK)
+        {
+            if (!string.IsNullOrEmpty(stock_CIK)) {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
+                FavouriteStocks favouriteStock = new FavouriteStocks
+                {
+                    Stock_CIK = stock_CIK,
+                    User_Id = user.Id
+                };
+
+                // Add the new object to the database
+                _context.FavouriteStocks.Add(favouriteStock);
+                await _context.SaveChangesAsync();
+            }
+            // Redirect the user back to the index page
+            return RedirectToAction(nameof(Index));
         }
     }
 }

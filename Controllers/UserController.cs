@@ -3,8 +3,11 @@ using Inz_Fn.Data;
 using Inz_Fn.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json.Linq;
 using ServiceStack;
+using System.Runtime.CompilerServices;
+
 
 namespace Inz_Fn.Controllers
 {
@@ -13,12 +16,15 @@ namespace Inz_Fn.Controllers
         private readonly UserManager<Inz_FnUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IMemoryCache _memoryCache;
+        private const string StockTickersCacheKey = "StockTickersCacheKey";
 
-        public UserController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<Inz_FnUser> userManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _context = context;
             _roleManager = roleManager;
+            _memoryCache = memoryCache;
         }
         public IActionResult Index()
         {
@@ -158,6 +164,135 @@ namespace Inz_Fn.Controllers
                 Active = activeStocks
             };
             return View(model);
+        }
+        public async Task<IActionResult> Favourite(string? searchString, string? sort, string? sortOrder, int currentPage = 1, int pageSize = 20) {
+            var user = await _userManager.GetUserAsync(User);
+            List<StockTickers> stockTickers = new List<StockTickers>();
+            List<StockTickers> favS = new List<StockTickers>();
+            List<FavouriteStocks> favouriteStocks = _context.FavouriteStocks.Where(x => x.User_Id == user.Id).ToList();
+            stockTickers = await GetGroupedDaily();
+            favS = stockTickers
+                .Where(st => favouriteStocks.Any(fs => fs.Stock_CIK == st.T))
+                .ToList();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToUpper();
+                stockTickers = stockTickers.Where(s => s.T.Contains(searchString)).ToList();
+            }
+            if (!string.IsNullOrEmpty(sort) && !string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "Symbol":
+                        favS = sortOrder == "asc" ? favS.OrderBy(s => s.T).ToList() : favS.OrderByDescending(s => s.T).ToList();
+                        break;
+                    case "Cena":
+                        favS = sortOrder == "asc" ? favS.OrderBy(s => s.c).ToList() : favS.OrderByDescending(s => s.c).ToList();
+                        break;
+                    case "Zmiana":
+                        favS = sortOrder == "asc" ? favS.OrderBy(s => s.dailyChange).ToList() : favS.OrderByDescending(s => s.dailyChange).ToList();
+                        break;
+                    case "Transakcje":
+                        favS = sortOrder == "asc" ? favS.OrderBy(s => s.n).ToList() : favS.OrderByDescending(s => s.n).ToList();
+                        break;
+                        // Dodaj przypadki dla innych kolumn
+                }
+            }
+            var count = favS.Count();
+            var items = favS.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            var model = new FavouriteStockViewModel
+            {
+                StockTickers = favS,
+                Pagination = new PaginationModel
+                {
+                    CurrentPage = currentPage,
+                    ItemsPerPage = pageSize,
+                    TotalItems = count,
+                },
+                searchStr = searchString,
+                sort = sort,
+                sortOrder = sortOrder
+            };
+            return View(model);
+        }
+        private async Task<List<StockTickers>> GetGroupedDaily()
+        {
+            if (_memoryCache.TryGetValue(StockTickersCacheKey, out List<StockTickers> cachedStockTickers))
+            {
+                return cachedStockTickers;
+            }
+            else
+            {
+                // Dane nie są dostępne w pamięci podręcznej, wykonaj żądanie do API
+                string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
+                DateTime today = DateTime.Now;
+
+                // Sprawdź dzień tygodnia i przypisz odpowiednią wartość
+                int value;
+                if (today.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    value = 2;
+                }
+                else if (today.DayOfWeek == DayOfWeek.Sunday || today.DayOfWeek == DayOfWeek.Monday)
+                {
+                    value = 3;
+                }
+                else
+                {
+                    value = 1;
+                    if (today.Hour < 10)
+                    {
+                        value += 1;
+                    }
+                }
+
+                Console.WriteLine(today.Hour);
+                string date = DateTime.Now.AddDays(-value).ToString("yyyy-MM-dd");
+                string apiUrl = $"https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/{date}?adjusted=true&apiKey={apiKey}";
+
+                using HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    JObject json = JObject.Parse(content);
+                    JToken results = json["results"];
+
+                    List<StockTickers> stockTickers = new List<StockTickers>();
+                    foreach (JToken result in results)
+                    {
+                        StockTickers stockTicker = result.ToObject<StockTickers>();
+                        stockTickers.Add(stockTicker);
+                    }
+                    stockTickers = stockTickers.OrderBy(x => x.T).ToList();
+
+
+                    // Zapisz dane w pamięci podręcznej
+                    _memoryCache.Set(StockTickersCacheKey, stockTickers, TimeSpan.FromMinutes(30)); // Dane będą przechowywane przez 30 minut
+
+                    return stockTickers;
+                }
+                else
+                {
+                    throw new Exception($"Error: {response.StatusCode}");
+                }
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteFavourite(string Stock_CIK)
+        {
+            //First Fetch the User you want to Delete
+            var fav = _context.FavouriteStocks.FirstOrDefault(x=>x.Stock_CIK== Stock_CIK);
+            if (fav!=null) {
+                _context.FavouriteStocks.Remove(fav);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Favourite");
+
+            }else { return RedirectToAction("Favourite"); };
+
+
+
         }
     }
 }

@@ -12,5 +12,6 @@ namespace Inz_Fn.Data
         }
         public DbSet<Stock> Stock { get; set; }
         public DbSet<StockHistory> StocksHistory { get; set; }
+        public DbSet<FavouriteStocks> FavouriteStocks { get; set; }
     }
 }
