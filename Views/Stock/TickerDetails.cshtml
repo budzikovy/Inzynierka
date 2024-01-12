@@ -63,40 +63,80 @@
     {
         <img src="@Model.tickDetails.branding.logo_url" alt="Logo" />
     }
-    
+    <div class="col">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Nazwa</td>
+                    <td>
+                        @Model.tickDetails.name
+                    </td>
+                </tr>
+                <tr>
+                    <td>Symbol</td>
+                    <td>
+                        @Model.tickDetails.ticker
+                    </td>
+                </tr>
+                <tr>
+                    <td>Waluta</td>
+                    <td>
+                        @Model.tickDetails.currency_name
+                    </td>
+                </tr>
+                <tr>
+                    <td>Siedziba(skrót kraju)</td>
+                    <td>
+                        @Model.tickDetails.locale
+                    </td>
+                </tr>
+                <tr>
+                    <td>Numer kontaktowy</td>
+                    <td>
+                        @Model.tickDetails.phone_number
+                    </td>
+                </tr>
+                <tr>
+                    <td>Strona Internetowa</td>
+                    <td>
+                        @Model.tickDetails.homepage_url
+                    </td>
+                </tr>
+                <tr>
+                    <td>Adres</td>
+                    <td>
+                            @if (Model.tickDetails.address != null)
+                            {
+                            <span>
+                                @Model.tickDetails.address.address1, @Model.tickDetails.address.city, @Model.tickDetails.address.postal_code @Model.tickDetails.address.state
+                            </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    Brak danych
+                                </span>
+                            }
+                    </td>
+                </tr>
+                <tr>
+                    <td>Opis</td>
+                    <td>
+                        @Model.tickDetails.description
+                    </td>
+                </tr>
+                <tr>
+                    <td>Data założenia</td>
+                    <td>
+                        @Model.tickDetails.list_date
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <dl class="row">
-        <dt class="col-sm-2">
-            Active
-        </dt>
-        <dd class="col-sm-10">
-            @Model.tickDetails.active
-        </dd>
-        <dt class="col-sm-2">
-            CIK
-        </dt>
-        <dd class="col-sm-10">
-            @Model.tickDetails.cik
-        </dd>
-        <dt class="col-sm-2">
-            Composite FIGI
-        </dt>
-        <dd class="col-sm-10">
-            @Model.tickDetails.composite_figi
-        </dd>
-        <dt class="col-sm-2">
-            Address
-        </dt>
-        <dd class="col-sm-10">
-            @if (Model.tickDetails.address != null)
-            {
-                @Model.tickDetails.address.address1 @Model.tickDetails.address.city @Model.tickDetails.address.postal_code @Model.tickDetails.address.state
-            }
-            else
-            {
-                <p>Brak danych</p>
-            }
-        </dd>
+        
         <dt class="col-sm-2">
             Cena zamknięcia 
         </dt>
@@ -113,205 +153,10 @@
 
     
 </div>
-<div class="tab">
-    <button class="tablinks" onclick="changeView(event, 'Hour')" id="defaultOpen">Hour</button>
-    <button class="tablinks" onclick="changeView(event, 'Minute')">Minute</button>
-</div>
-<div id="Hour" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <button id="toggleChartType" type="button">Toggle Chart Type</button>
-
-    <div id="stockChartContainer" style="height: 400px; min-width: 310px"></div>
-    
-</div>
-
-<div id="Minute" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <button id="toggleChartType2" type="button">Toggle Chart Type</button>
-
-    <div id="stockChartContainer2" style="height: 400px; min-width: 310px"></div>
-</div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 <script type="text/javascript">
-    $(function () {
-        var data = @Html.Raw(Json.Serialize(Model.stockModels));
-        var ohlc = [], volume = [];
-
-        for (var i = 0; i < data.length; i++) {
-            ohlc.push([
-                data[i].t,
-                data[i].o,
-                data[i].h,
-                data[i].l,
-                data[i].c
-            ]);
-
-            volume.push([
-                data[i].t,
-                data[i].v
-            ]);
-        }
-
-        var chart = Highcharts.stockChart('stockChartContainer', {
-            rangeSelector: {
-                selected: 1
-            },
-
-            title: {
-                text: 'Hour stock prices'
-            },
-
-            yAxis: [{
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'OHLC'
-                },
-                height: '60%',
-                lineWidth: 2
-            }, {
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'Volume'
-                },
-                top: '65%',
-                height: '35%',
-                offset: 0,
-                lineWidth: 2
-            }],
-
-            series: [{
-                type: 'candlestick',
-                name: 'Stock Price',
-                data: ohlc
-            }, {
-                type: 'column',
-                name: 'Volume',
-                data: volume,
-                yAxis: 1
-            }]
-        });
-
-        $('#toggleChartType').click(function () {
-            var series = chart.series[0];
-            if (series.type === 'candlestick') {
-                series.update({
-                    type: 'line'
-                });
-            } else {
-                series.update({
-                    type: 'candlestick'
-                });
-            }
-        });
-    });$(function () {
-        var data = @Html.Raw(Json.Serialize(Model.stockModels2));
-        var ohlc = [], volume = [];
-
-        for (var i = 0; i < data.length; i++) {
-            ohlc.push([
-                data[i].t,
-                data[i].o,
-                data[i].h,
-                data[i].l,
-                data[i].c
-            ]);
-
-            volume.push([
-                data[i].t,
-                data[i].v
-            ]);
-        }
-
-        var chart = Highcharts.stockChart('stockChartContainer2', {
-            rangeSelector: {
-                buttons: [    {
-                    type: 'minute',
-                    count: 15,
-                    text: '15m'
-                }, {
-                    type: 'minute',
-                    count: 30,
-                    text: '30m'
-                }, {
-                    type: 'hour',
-                    count: 1,
-                    text: '1h'
-                }, {
-                    type: 'hour',
-                    count: 3,
-                    text: '3h'
-                }, {
-                    type: 'day',
-                    count: 1,
-                    text: '1d'
-                }, {
-                    type: 'all',
-                    text: 'All'
-                }]
-            },
-
-            title: {
-                text: 'Minute stock prices'
-            },
-
-            yAxis: [{
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'OHLC'
-                },
-                height: '60%',
-                lineWidth: 2
-            }, {
-                labels: {
-                    align: 'right',
-                    x: -3
-                },
-                title: {
-                    text: 'Volume'
-                },
-                top: '65%',
-                height: '35%',
-                offset: 0,
-                lineWidth: 2
-            }],
-
-            series: [{
-                type: 'candlestick',
-                name: 'Stock Price',
-                data: ohlc
-            }, {
-                type: 'column',
-                name: 'Volume',
-                data: volume,
-                yAxis: 1
-            }]
-        });
-
-        $('#toggleChartType2').click(function () {
-            var series = chart.series[0];
-            if (series.type === 'candlestick') {
-                series.update({
-                    type: 'line'
-                });
-            } else {
-                series.update({
-                    type: 'candlestick'
-                });
-            }
-        });
-    });
     function changeView(evt, action) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");

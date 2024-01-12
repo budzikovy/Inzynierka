@@ -1,0 +1,111 @@
+﻿@model Inz_Fn.Models.FavouriteStockViewModel
+<table class="table table-blue">
+    <thead>
+        <tr>
+            <th scope="col">
+                <a asp-action="Favourite" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Symbol
+                </a>
+            </th>
+            <th scope="col">
+                <a asp-action="Favourite" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Cena
+                </a>
+
+            </th>
+            <th scope="col">
+                <a asp-action="Favourite" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Zmiana dobowa(%)
+                </a>
+            </th>
+            <th scope="col">
+
+                <a asp-action="Favourite" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                    Liczba trasnsakcji
+                </a>
+            </th>
+            <th scope="col">
+                <form asp-action="Favourite" method="get">
+                    <input type="text" name="searchString" />
+                    <button type="submit" class="btn btn-primary" value="Szukaj">Szukaj</button>
+                </form>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.StockTickers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.T)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.c)
+                </td>
+                <td>
+                    <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
+                        @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                    </span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.n)
+                </td>
+                <td>
+                    <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn btn-outline-primary" role="button">Zobacz</a>
+                </td>
+                <td>
+                    <form method="post" asp-action="DeleteFavourite" asp-route-Stock_CIK="@item.T">
+                        <span id="confirmDeleteSpan_@item.T" style="display:none">
+                            <span>Are you sure you want to Delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a href="#" class="btn btn-primary"
+                               onclick="confirmDelete('@item.T', false)">No</a>
+                        </span>
+
+                        <span id="deleteSpan_@item.T">
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@item.T', true)">Delete</a>
+                        </span>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")" href="@(Model.Pagination.CurrentPage > 1 ? Url.Action("Favourite", "User", new { currentPage = Model.Pagination.CurrentPage - 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">&lt;</a>
+
+    @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
+    {
+        if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
+
+        {
+            if (i == Model.Pagination.CurrentPage)
+            {
+                <button type="button" class="btn btn-primary" disabled>@i</button>
+            }
+            else
+            {
+                <a class="btn btn-primary" href="@Url.Action("Favourite", "User", new { currentPage = i,searchString = Model.searchStr,sort=Model.sort, sortOrder=Model.sortOrder })" role="button">@i</a>
+            }
+        }
+
+    }
+    <a class="btn btn-primary @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")" href="@(Model.Pagination.CurrentPage<Model.Pagination.TotalPages ? Url.Action("Favourite", "User", new { currentPage = Model.Pagination.CurrentPage + 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">></a>
+</div>
+
+<script>
+    function confirmDelete(uniqueId, isDeleteClicked) {
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
+
+        if (isDeleteClicked) {
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        } else {
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }
+</script>
