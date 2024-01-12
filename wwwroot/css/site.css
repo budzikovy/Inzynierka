@@ -42,7 +42,7 @@ body {
 .sticky-top {
     position: sticky;
     top: 0;
-    z-index: 1000; /* Gwarantuje, ¿e bêdzie na wierzchu innych elementów */
+    z-index: 1000; 
 }
 
 
@@ -69,6 +69,12 @@ body {
 .btn.favourite:disabled {
     color: #0052FF;
     opacity:1;
+}
+
+
+.stockcol{
+    border: 2px solid #0052FF;
+    border-radius: 20px;
 }
 
 .index-text {
@@ -119,43 +125,57 @@ body {
 
 
 .table-blue tr:hover {
-    font-weight: bold; /* Makes the text bold */
+    font-weight: bold;
 }
 
 .tab {
     display: flex;
-    flex-wrap: nowrap; /* Prevent wrapping */
+    flex-wrap: nowrap; 
 }
 
-/* Base styles for buttons */
+
+.search-container {
+    display: flex; 
+    width: 100%; 
+}
+
+.search-input {
+    flex-grow: 1; 
+    margin-right: 10px; 
+}
+
+.search-button {
+    flex-shrink: 0; 
+}
+
+
+.btn-nopadding{
+    padding: 1px 0 !important;
+}
+
 .btn {
-    padding: 10px 15px; /* Adjust padding as needed */
-    /* Other styles */
+    padding: 10px 15px; 
 }
 
-/* Media query for smaller screens */
 @media (max-width: 768px) {
     .btn {
-        padding: 8px 10px; /* Reduce padding */
-        font-size: 14px; /* Reduce font size */
-        /* Other adjustments */
+        padding: 8px 10px;
+        font-size: 14px; 
     }
 }
 
-/* Media query for even smaller screens */
 @media (max-width: 480px) {
     .btn {
-        padding: 5px 8px; /* Further reduce padding */
-        font-size: 12px; /* Further reduce font size */
-        /* Other adjustments */
+        padding: 5px 8px; 
+        font-size: 12px; 
     }
 }
 
 @media only screen and (max-width: 500px) {
-    .btn {
-        display: block; /* Stack buttons vertically */
-        width: 100%; /* Full width */
-        margin-bottom: 10px; /* Add some space between the buttons */
+    .btn100 {
+        display: block;
+        width: 100%; 
+        margin-bottom: 10px; 
     }
 }
 
@@ -170,17 +190,26 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 601px) {
+    .show-on-mobile {
+        display: none;
+    }
+}
+
+
+@media (max-width: 767px) {
     .hide-on-mobile-md {
         display: none;
     }
 }
 
-    @media (min-width: 601px) {
-        .show-on-mobile {
-            display: none;
-        }
+@media (min-width: 768px) {
+    .hide-on-desktop {
+        display: none;
     }
+}
+
+
 
     @media (max-width: 500px) {
         body {
@@ -199,12 +228,12 @@ body {
 
     .table-blue thead {
         background-color: #0D6EFD;
-        color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+        color: #fff; 
     }
 
     .table-blue tbody {
-        background-color: white; /* Kolor niebieski z pierwszej linii */
-        color: black; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+        background-color: white; 
+        color: black; 
         border: 2px
     }
 
@@ -254,7 +283,7 @@ body {
         .icon-box .fas {
             font-size: 24px;
             margin-bottom: 10px;
-            color: #0052ff; /* Updated color for the icons */
+            color: #0052ff; 
         }
 
     h2 {
@@ -348,11 +377,11 @@ body {
 
 .fas.fa-sort-up,
 .fas.fa-sort-down {
-    color: #ccc; /* Mniej podœwietlony kolor dla nieaktywnych ikon */
+    color: #ccc;
 }
 
 .active-sort-icon {
-    color: #fff; /* Bardziej podœwietlony kolor dla aktywnej ikony */
+    color: #fff; 
 }
 
     @media (min-width: 768px) {
