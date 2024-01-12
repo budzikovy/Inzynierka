@@ -12,7 +12,7 @@
         public float t { get; set; }
         public float v { get; set; }
         public float vw { get; set; }
-        public bool isFavourtie { get; set; }
+        public bool isFavourite { get; set; }
         public float dailyChange
         {
             get

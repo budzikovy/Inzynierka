@@ -1,35 +1,37 @@
 ﻿@model Inz_Fn.Models.FavouriteStockViewModel
-<table class="table table-blue">
+<table class="table table-blue mt-5 ">
     <thead>
         <tr>
             <th scope="col">
-                <a asp-action="Favourite" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Symbol
                 </a>
             </th>
             <th scope="col">
-                <a asp-action="Favourite" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Cena
                 </a>
 
             </th>
             <th scope="col">
-                <a asp-action="Favourite" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Zmiana dobowa(%)
                 </a>
             </th>
             <th scope="col">
 
-                <a asp-action="Favourite" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Liczba trasnsakcji
                 </a>
             </th>
-            <th scope="col">
+
+            <th scope="col" class="text-end">
                 <form asp-action="Favourite" method="get">
                     <input type="text" name="searchString" />
                     <button type="submit" class="btn btn-primary" value="Szukaj">Szukaj</button>
                 </form>
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -73,7 +75,7 @@
     </tbody>
 </table>
 
-<div>
+<div class="text-center mt-5">
     <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")" href="@(Model.Pagination.CurrentPage > 1 ? Url.Action("Favourite", "User", new { currentPage = Model.Pagination.CurrentPage - 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">&lt;</a>
 
     @for (var i = 1; i <= Model.Pagination.TotalPages; i++)

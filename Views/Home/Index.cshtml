@@ -12,6 +12,8 @@
     <div class="index-text">
         <div class="font-1 fw-bold">Po co jesteśmy?</div>
         <div class="font-2 my-3"> Pomagamy w analizie akcji za pomocą różnorodnych wykresów cenowych i danych statystycznych w sposób przyjemny i intuicyjny dla użytkownika</div>
+        
+
         @if (!SignInManager.IsSignedIn(User)){
             <form class="sign-up-form">
                 <div class="form-group">
@@ -20,7 +22,9 @@
                 <a class="btn btn-primary blue-button my-3 form-control" id="register" asp-area="Identity" asp-page="/Account/Register" onclick="storeEmail()">Zacznij już teraz</a>
             </form>
 
-            <div class="font-3"> Zarejestruj się aby inwestować i analizować od zaraz</div>
+            <div class="font-3"> Zarejestruj się aby inwestować i analizować od zaraz </div>
+
+
         }
 
     </div>

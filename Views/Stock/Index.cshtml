@@ -1,5 +1,6 @@
 ﻿@model Inz_Fn.Models.StockTickersViewModel
 @{
+
     ViewData["Title"] = "Index";
 }
 
@@ -40,7 +41,7 @@
                             Symbol
                         </th>
                         <th scope="col">
-                            Największe zmiany(+)
+                            Największe wzrost
                         </th>
                     </tr>
                 </thead>
@@ -69,7 +70,7 @@
                             Symbol
                         </th>
                         <th scope="col">
-                            Największe zmiany(-)
+                            Największe spadek
                         </th>
                     </tr>
                 </thead>
@@ -92,32 +93,32 @@
         </div>
     </div>
 </div>
-<table class="table table-blue">
+<table class="table table-blue mt-5">
     <thead>
         <tr>
             <th scope="col">
-                <a asp-action="Index" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Index" asp-route-sort="Symbol" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Symbol
                 </a>
             </th>
             <th scope="col">
-                <a asp-action="Index" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Index" asp-route-sort="Cena" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Cena
                 </a>
 
             </th>
             <th scope="col">
-                <a asp-action="Index" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Index" asp-route-sort="Zmiana" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Zmiana dobowa(%)
                 </a>
             </th>
             <th scope="col">
-
-                <a asp-action="Index" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Index" asp-route-sort="Transakcje" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
                     Liczba trasnsakcji
                 </a>
             </th>
-            <th scope="col">
+            <th></th>
+            <th scope="col" class="text-end">
                 <form asp-action="Index" method="get">
                     <input type="text" name="searchString" />
                     <button type="submit" class="btn btn-primary" value="Szukaj">Szukaj</button>
@@ -142,19 +143,31 @@
             <td>
                 @Html.DisplayFor(modelItem => item.n)
             </td>
-            <td>
-                    <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn btn-outline-primary" role="button">Zobacz</a>
+                <td>
+                    <button type="submit" class="btn btn-primary">Kup teraz</button>
+
                     <form asp-action="PurchaseStock" method="post">
                         <input type="hidden" name="Stock_CIK" value="@item.T" />
                         <input type="hidden" name="Price_per_stock" value="@item.c" />
                         <input type="hidden" name="Currency" value="usd" />
-                        <button type="submit" class="btn btn-primary">Kup teraz</button>
                     </form>
-            </td>
-            <td>
+                </td>
+            <td class="text-end">
                     <form asp-action="AddToFavorites" asp-controller="Stock" method="get">
                         <input type="hidden" name="stock_CIK" value="@item.T" />
-                        <button type="submit" @(item.isFavourtie == true ? "disabled" : "") class="btn btn-outline-primary">Add to Favorites</button>
+                        <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn" role="button">
+                            <div class="detailicon">
+                                <svg class="bn-svg h-5 w-5" alt="Szczegóły" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M18 3H3v18h9.222A5.5 5.5 0 0118 11.97V3zM5.02 9.286L8.556 5.75l3.182 3.182 3.181-3.182 1.061 1.06-4.242 4.243-3.182-3.182-2.475 2.475-1.061-1.06zm12.544 9.278a2 2 0 10-2.828-2.828 2 2 0 002.828 2.828zm1.414-4.242a4.002 4.002 0 01.744 4.63l2.276 2.278-1.767 1.767-2.277-2.276a4.002 4.002 0 01-4.633-6.4 4 4 0 015.657 0z" fill="currentColor"></path></svg>
+                            </div>
+                        </a>
+                        <button type="submit" @(item.isFavourite == true ? "disabled" : "") class="btn @(item.isFavourite == true ? "favourite" : "not-favourite")">
+                            <div style="width:20px">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" id="BTCUSDT_spot_favorite" class="shrink-0 self-center css-a8x3xf">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.173 3.007L12.768 3l2.41 5.11 5.326.831.496 1.495-3.89 4.013.895 5.636-1.298.915-4.735-2.648L7.236 21l-1.296-.923.946-5.632L3 10.436l.496-1.495 5.322-.83 2.355-5.104z" fill="currentColor"></path>
+                                </svg>
+                            </div>
+                        </button>
+
                     </form>
             </td>
         </tr>
@@ -162,7 +175,7 @@
     </tbody>
 </table>
 
-<div>
+<div class="text-center mt-5">
     <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")" href="@(Model.Pagination.CurrentPage > 1 ? Url.Action("Index", "Stock", new { currentPage = Model.Pagination.CurrentPage - 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">&lt;</a>
 
     @for (var i = 1; i <= Model.Pagination.TotalPages; i++)

@@ -58,6 +58,18 @@ body {
     font-size: 15px;
 }
 
+.detailicon{
+    width:20px;
+}
+
+.detailicon:hover {
+    color: #0052FF;
+}
+
+.btn.favourite:disabled {
+    color: #0052FF;
+    opacity:1;
+}
 
 .index-text {
     max-width: 500px;
@@ -330,7 +342,18 @@ body {
     }
 
 
+    .cyrk a{
+        color:white;
+    }
 
+.fas.fa-sort-up,
+.fas.fa-sort-down {
+    color: #ccc; /* Mniej podœwietlony kolor dla nieaktywnych ikon */
+}
+
+.active-sort-icon {
+    color: #fff; /* Bardziej podœwietlony kolor dla aktywnej ikony */
+}
 
     @media (min-width: 768px) {
 

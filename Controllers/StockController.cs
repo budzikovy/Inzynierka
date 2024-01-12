@@ -150,10 +150,10 @@ namespace Inz_Fn.Controllers
             {
                 if (favouriteStocks.Any(fs => fs.Stock_CIK == stock.T))
                 {
-                    stock.isFavourtie = true;
+                    stock.isFavourite = true;
                 }
                 else {
-                    stock.isFavourtie = false;
+                    stock.isFavourite = false;
                 }
                 stockstr.Add(stock.T);
             }
