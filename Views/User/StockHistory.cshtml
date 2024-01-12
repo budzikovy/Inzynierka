@@ -2,12 +2,12 @@
 
 <h1>User Portfolio</h1>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
+    <div class="row ">
+        <div class="col d-flex justify-content-center align-items-center">
             <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
         </div>
         <div class="col">
-            <table class="table">
+            <table class="table nowrap-md">
                 <thead>
                     <tr>
                         <th>Pozycja</th>
@@ -25,24 +25,27 @@
                     </tr>
                     <tr>
                         <td>Łączna suma zainwestowanych pieniędzy</td>
-                        <td>@Math.Round(Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount * x.Price_per_stock_b),2)</td>
+                        <td>@Math.Round(Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount * x.Price_per_stock_b),2) zł</td>
                     </tr>
                     <tr>
                         <td>Łączna wartość portfela(bazując na cenie zakupu)</td>
-                        <td>@Math.Round((decimal)Model.Active.Sum(x => x.Amount * x.Price_per_stock), 2)</td>
+                        <td>@Math.Round((decimal)Model.Active.Sum(x => x.Amount * x.Price_per_stock), 2) zł</td>
                     </tr>
                     <tr>
                         <td>Średnia cena kupionej akcji</td>
-                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b), 2)</td>
+                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b), 2) zł</td>
                     </tr>
                     <tr>
                         <td>Średnia cena sprzedanej akcji</td>
-                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s), 2)</td>
+                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s), 2) zł</td>
                     </tr>
                     <tr>
                         <td>Łączny zysk/strata</td>
-                        <td>@Model.All.Sum(x => x.Income)</td>
+                        <td class="@(Model.All.Sum(x => x.Income) > 0 ? "gain" : Model.All.Sum(x => x.Income) < 0 ? "loss" : "")">
+                            @Model.All.Sum(x => x.Income)
+                        zł </td>
                     </tr>
+
                 </tbody>
             </table>
         </div>
@@ -50,55 +53,61 @@
 </div>
 <div class="tab">
     <button type="button" class="btn text-white blue-button btn-lg" onclick="changeView(event, 'Bought')" id="defaultOpen">Bought</button>
-    <button type="button" class="btn text-white blue-button btn-lg" onclick="changeView(event, 'Sold')">Sold</button>
+    <button type="button" class="btn text-white blue-button btn-lg mx-3" onclick="changeView(event, 'Sold')">Sold</button>
     <button type="button" class="btn text-white blue-button btn-lg" onclick="location.href='@Url.Action("CurrentStocks", "User")'">Active</button>
-
 </div>
 <p></p>
 <div id="Bought" class="tabcontent">
-    <table class="table table-blue" id="myTable">
-        <thead>
-            <tr>
-                <th scope="col" onclick="sortTable(0)">
-                    Ticker
-                </th>
-                <th scope="col" onclick="sortTablen(1)">
-                    Price
-                </th>
-                <th scope="col" onclick="sortTable(2)">
-                    Date of purchase
-                </th>
-                <th scope="col" onclick="sortTablen(3)">
-                    Amount
-                </th>
-                <th scope="col" onclick="sortTablen(4)">
-                    Invested Sum
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.StockHistB)
-            {
+        <table class="table table-blue responsive-table" id="myTable">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Stock_CIK)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price_per_stock_b)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Math.Round((item.Price_per_stock_b * item.Amount), 2)
-                    </td>
+                    <th scope="col" onclick="sortTable(0)">
+                        Ticker
+                    </th>
+                    <th scope="col" class="hide-on-mobile" onclick="sortTablen(1)">
+                        Price
+                    </th>
+                    <th scope="col" onclick="sortTable(2)">
+                        Purchase date
+                    </th>
+                    <th scope="col" class="hide-on-mobile" onclick="sortTablen(3)">
+                        Amount
+                    </th>
+                    <th scope="col" class="show-on-mobile" onclick="sortTablen(1)">
+                        Amount / Price
+                    </th>
+                    <th scope="col" class="hide-on-mobile" onclick="sortTablen(4)">
+                        Invested Sum
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.StockHistB)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Stock_CIK)
+                        </td>
+                        <td class="hide-on-mobile">
+                            @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td class="hide-on-mobile">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td class="show-on-mobile">
+                            @Html.DisplayFor(modelItem => item.Amount) / @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+                        </td>
+                        <td class="hide-on-mobile">
+                            @Math.Round((item.Price_per_stock_b * item.Amount), 2)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
     <div class="container-fluid">
         <div class="col">
             <canvas id="myChart2" style="width:100%;max-width:600px"></canvas>
@@ -106,31 +115,39 @@
     </div>
 </div>
 
+
+
+
+
 <div id="Sold" class="tabcontent">
-    <table class="table table-blue" id="myTable2">
+    <table class="table table-blue responsive-table" id="myTable2">
         <thead>
             <tr>
                 <th scope="col" onclick="sortTable2(0)">
                     Ticker
                 </th>
-                <th scope="col" onclick="sortTable2n(1)">
-                    Price
-                </th>
-                <th scope="col" onclick="sortTable2(2)">
-                    Date of purchase
-                </th>
-                <th scope="col" onclick="sortTable2n(3)">
-                    Ammount
-                </th>
-                <th scope="col" onclick="sortTable2n(4)">
-                    Invested Sum
-                </th>
-                <th scope="col" onclick="sortTable2n(5)">
-                    Sale price
-                </th>
                 <th scope="col" onclick="sortTable2(6)">
                     Sale date
                 </th>
+                <th scope="col" class="hide-on-mobile" onclick="sortTable2n(1)">
+                    Price
+                </th>
+                <th scope="col" class="hide-on-mobile hide-on-mobile-md" onclick="sortTable2(2)">
+                    Date of purchase
+                </th>
+                <th scope="col" class="hide-on-mobile" onclick="sortTable2n(3)">
+                    Amount
+                </th>
+                <th scope="col" class="show-on-mobile" onclick="sortTablen(1)">
+                    Amount / Price
+                </th>
+                <th scope="col" class="hide-on-mobile hide-on-mobile-md" onclick="sortTable2n(4)">
+                    Invested Sum
+                </th>
+                <th scope="col" class="hide-on-mobile" onclick="sortTable2n(5)">
+                    Sale price
+                </th>
+
                 <th scope="col" onclick="sortTable2n(7)">
                     Income
                 </th>
@@ -144,23 +161,28 @@
                         @Html.DisplayFor(modelItem => item.Stock_CIK)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Price_per_stock_b)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Math.Round((item.Price_per_stock_b * item.Amount), 2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price_per_stock_s)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.SellDate)
                     </td>
+                    <td class="hide-on-mobile">
+                        @Html.DisplayFor(modelItem => item.Price_per_stock_b)
+                    </td>
+                    <td class="hide-on-mobile hide-on-mobile-md">
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td class="hide-on-mobile">
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td class="show-on-mobile">
+                        @Html.DisplayFor(modelItem => item.Amount) / @Html.DisplayFor(modelItem => item.Price_per_stock_s)
+
+                    </td>
+                    <td class="hide-on-mobile hide-on-mobile-md">
+                        @Math.Round((item.Price_per_stock_b * item.Amount), 2)
+                    </td>
+                    <td class="hide-on-mobile">
+                        @Html.DisplayFor(modelItem => item.Price_per_stock_s)
+                    </td>
+
                     <td>
                         <span class="@(item.Income > 0 ? "gain" : item.Income < 0 ? "loss" : "")">@Html.DisplayFor(modelItem => item.Income)</span>
                     </td>
@@ -219,8 +241,7 @@
     const barColors = [
         "#0052FF",
         "#0033FF",
-        "#0085FF",
-
+        "#0085FF"
     ];
 
     new Chart("myChart", {
@@ -248,7 +269,7 @@
         data: {
             labels: Stock_Cik,
             datasets: [{
-                backgroundColor: barColors2,
+                backgroundColor: Array(Stock_Cik.length).fill("#0052FF"),
                 data: Stock_Amount
             }]
         },
@@ -270,7 +291,7 @@
             labels: Stock_Cik,
             datasets: [{
                 label: 'Bought',
-                backgroundColor: "#0052ff",
+                backgroundColor: "#0085FF",
                 data: Stock_AmountP
             },{
 

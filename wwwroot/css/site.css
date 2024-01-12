@@ -106,22 +106,89 @@ body {
 }
 
 
-    .table-blue tr:hover {
-        font-weight: bold; /* Makes the text bold */
+.table-blue tr:hover {
+    font-weight: bold; /* Makes the text bold */
+}
+
+.tab {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Base styles for buttons */
+.btn {
+    padding: 10px 15px; /* Adjust padding as needed */
+    /* Other styles */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .btn {
+        padding: 8px 10px; /* Reduce padding */
+        font-size: 14px; /* Reduce font size */
+        /* Other adjustments */
+    }
+}
+
+/* Media query for even smaller screens */
+@media (max-width: 480px) {
+    .btn {
+        padding: 5px 8px; /* Further reduce padding */
+        font-size: 12px; /* Further reduce font size */
+        /* Other adjustments */
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .btn {
+        display: block; /* Stack buttons vertically */
+        width: 100%; /* Full width */
+        margin-bottom: 10px; /* Add some space between the buttons */
+    }
+}
+
+
+@media (max-width: 600px) {
+    .hide-on-mobile {
+        display: none;
     }
 
-.loss {
-    color: red;
+    .show-on-mobile {
+        display: table-cell;
+    }
 }
 
-.gain {
-    color: green;
+@media (max-width: 768px) {
+    .hide-on-mobile-md {
+        display: none;
+    }
 }
 
-.table-blue thead {
-    background-color: #0D6EFD;
-    color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
-}
+    @media (min-width: 601px) {
+        .show-on-mobile {
+            display: none;
+        }
+    }
+
+    @media (max-width: 500px) {
+        body {
+            font-size: 0.7em
+        }
+    }
+
+    .loss {
+        color: red;
+    }
+
+
+    .gain {
+        color: green;
+    }
+
+    .table-blue thead {
+        background-color: #0D6EFD;
+        color: #fff; /* Zak³adaj¹c, ¿e chcesz zachowaæ bia³y kolor tekstu */
+    }
 
     .table-blue tbody {
         background-color: white; /* Kolor niebieski z pierwszej linii */
@@ -129,162 +196,76 @@ body {
         border: 2px
     }
 
-.dropdown-item:focus, .dropdown-item:hover {
-    color: #1e2125;
-    background-color: #0052ff;
-}
-
-.dropdown-menu .dropdown-item:hover {
-    color: #ffffff !important;
-    font-weight: bold;
-    border: none !important;
-}
-
-.dropdown-item {
-    color: white;
-}
-
-.dropdown-menu {
-    background-color: #0052ff;
-    border: none !important;
-}
-
-.no-dropdown-icon::after {
-    display: none;
-}
-
-.navbar-toggler {
-    border: none;
-    background: none;
-}
-
-    .navbar-toggler:focus {
-        box-shadow: none !important;
+    .dropdown-item:focus, .dropdown-item:hover {
+        color: #1e2125;
+        background-color: #0052ff;
     }
 
-
-.icon-box {
-    padding: 20px;
-    margin: 10px 0;
-    background: #fff;
-    border: 2px solid #0052ff;
-    box-shadow: 2px black;
-    border-radius: 4px;
-}
-
-    .icon-box .fas {
-        font-size: 24px;
-        margin-bottom: 10px;
-        color: #0052ff; /* Updated color for the icons */
+    .dropdown-menu .dropdown-item:hover {
+        color: #ffffff !important;
+        font-weight: bold;
+        border: none !important;
     }
 
-h2 {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
-.equal-height-row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.icon-box p {
-    flex-grow: 1;
-}
-
-.cubic {
-    position: relative;
-    color: #ffffff;
-    text-decoration: none;
-}
-
-    .cubic::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        transform: scaleX(0);
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: #ffffff;
-        transform-origin: bottom right;
-        transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    .dropdown-item {
+        color: white;
     }
 
-    .cubic:hover::after {
-        transform: scaleX(1);
-        transform-origin: bottom left;
+    .dropdown-menu {
+        background-color: #0052ff;
+        border: none !important;
     }
 
-
-@media (max-width: 768px) {
-    .promotion-text,
-    .sign-up-form .form-control,
-    .sign-up-form .btn-primary {
-        width: 100%;
+    .no-dropdown-icon::after {
+        display: none;
     }
 
-    .img-fluid-convert {
-        max-height: 300px;
+    .navbar-toggler {
+        border: none;
+        background: none;
     }
 
-    .padding-t {
-        padding-top: 4rem;
+        .navbar-toggler:focus {
+            box-shadow: none !important;
+        }
+
+
+    .icon-box {
+        padding: 20px;
+        margin: 10px 0;
+        background: #fff;
+        border: 2px solid #0052ff;
+        box-shadow: 2px black;
+        border-radius: 4px;
+    }
+
+        .icon-box .fas {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #0052ff; /* Updated color for the icons */
+        }
+
+    h2 {
+        margin-top: 20px;
+        margin-bottom: 30px;
     }
 
     .equal-height-row {
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
     }
 
-    .icon-box {
-        margin-bottom: 20px;
-        min-height: auto;
+    .icon-box p {
+        flex-grow: 1;
     }
 
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-    .index-text {
-        max-width: 350px;
-    }
-}
-
-@media (max-width: 1023px) {
-    .font-1 {
-        font-size: 25px;
-    }
-
-    .font-2 {
-        font-size: 15px;
-    }
-
-    .font-3 {
-        font-size: 10px;
-    }
-
-}
-
-
-
-
-@media (min-width: 768px) {
-
-    .padding-t {
-        padding-top: 10rem;
-    }
-
-    .img-fluid-convert {
-        max-width: 80%;
-        max-height: 400px;
-    }
-
-    .cubic-md {
+    .cubic {
         position: relative;
         color: #ffffff;
         text-decoration: none;
     }
 
-        .cubic-md::after {
+        .cubic::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -297,19 +278,107 @@ h2 {
             transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1.0);
         }
 
-        .cubic-md:hover::after {
+        .cubic:hover::after {
             transform: scaleX(1);
             transform-origin: bottom left;
         }
 
-}
 
-@media (max-width: 991px) {
-    .icon-box {
-        margin-bottom: 20px;
+    @media (max-width: 768px) {
+        .promotion-text,
+        .sign-up-form .form-control,
+        .sign-up-form .btn-primary {
+            width: 100%;
+        }
+
+        .img-fluid-convert {
+            max-height: 300px;
+        }
+
+        .padding-t {
+            padding-top: 4rem;
+        }
+
+        .equal-height-row {
+            display: block;
+        }
+
+        .icon-box {
+            margin-bottom: 20px;
+            min-height: auto;
+        }
     }
 
-    .equal-height-row {
-        display: block;
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .index-text {
+            max-width: 350px;
+        }
     }
-}
+
+    @media (max-width: 1023px) {
+        .font-1 {
+            font-size: 25px;
+        }
+
+        .font-2 {
+            font-size: 15px;
+        }
+
+        .font-3 {
+            font-size: 10px;
+        }
+    }
+
+
+
+
+    @media (min-width: 768px) {
+
+        .padding-t {
+            padding-top: 10rem;
+        }
+
+        .nowrap-md {
+            text-wrap: nowrap !important;
+        }
+
+        .img-fluid-convert {
+            max-width: 80%;
+            max-height: 400px;
+        }
+
+        .cubic-md {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+            .cubic-md::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                transform: scaleX(0);
+                height: 2px;
+                bottom: 0;
+                left: 0;
+                background-color: #ffffff;
+                transform-origin: bottom right;
+                transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+            }
+
+            .cubic-md:hover::after {
+                transform: scaleX(1);
+                transform-origin: bottom left;
+            }
+    }
+
+    @media (max-width: 991px) {
+        .icon-box {
+            margin-bottom: 20px;
+        }
+
+        .equal-height-row {
+            display: block;
+        }
+    }
+
