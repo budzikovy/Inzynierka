@@ -42,7 +42,7 @@
                     <tr>
                         <td>Łączny zysk/strata</td>
                         <td class="@(Model.All.Sum(x => x.Income) > 0 ? "gain" : Model.All.Sum(x => x.Income) < 0 ? "loss" : "")">
-                            @Model.All.Sum(x => x.Income)
+                            @Math.Round((decimal)Model.All.Sum(x => x.Income),2)
                         zł </td>
                     </tr>
 

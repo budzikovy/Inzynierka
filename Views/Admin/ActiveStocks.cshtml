@@ -1,18 +1,127 @@
 ﻿@model AdmStatModel
+@{
+    var bestSell = Model.Stock
+    .GroupBy(s => s.Stock_CIK)
+    .Select(g => new
+    {
+        StockCIK = g.Key,
+        TotalAmount = g.Sum(s => s.Amount)
+    })
+    .ToList();
+}
 <div class="container">
-    <span>Invested Sum: @Model.investedSum</span>
-    <span>Total Stocks bought: @Model.allStocks</span>
-    <span>Average price per stock: @Model.averagePPS</span>
+    <div class="row">
+        <div class="col">
+                <table class="table table-blue">
+                    <caption>Ostatnio kupione(aktywne)</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Symbol
+                            </th>
+                            <th scope="col">
+                                Data zakupu
+                            </th>
+                            <th scope="col">
+                                Ilość
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Stock.OrderByDescending(s => s.Date).Take(3).ToList())
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock_CIK)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </div>
+        <div class="col">
+                <table class="table table-blue">
+                    <caption>Najwięcej kupionych</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Symbol
+                            </th>
+                            <th scope="col">
+                                Liczba kupionych akcji
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in bestSell.OrderByDescending(s => s.TotalAmount).Take(3).ToList())
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StockCIK)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalAmount)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+        </div>
+        <div class="col">
+            <table class="table nowrap-md">
+                <thead>
+                    <tr>
+                        <th>Pozycja</th>
+                        <th>Wartość</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Zainwestowana kwota</td>
+                        <td>@Math.Round(Model.investedSum,2)</td>
+                    </tr>
+                    <tr>
+                        <td>Łączna liczba kupionych akcji</td>
+                        <td>@Model.allStocks</td>
+                    </tr>
+                    <tr>
+                        <td>Srednia cena akcji</td>
+                        <td>@Math.Round(Model.averagePPS,4)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
 <div class="container full-height">
-    <table class="table table-striped">
+    <table class="table table-blue responsive-table" id="myTable">
         <thead>
             <tr>
-                <th>User Id</th>
-                <th>CIK</th>
-                <th>Price per Stock</th>
-                <th>Date</th>
-                <th>Amount</th>
+                <th scope="col" onclick="sortTable(0)">
+                    Identyfikator użytkownika
+                </th>
+                <th scope="col" onclick="sortTable(1)">
+                    Symbol
+                </th>
+                <th scope="col" class="hide-on-mobile" onclick="sortTablen(2)">
+                    Cena zakupu
+                </th>
+                <th scope="col"  onclick="sortTablen(3)">
+                    Data zakupu
+                </th>
+                <th scope="col" class="show-on-mobile" onclick="sortTablen(2)">
+                    Cena zakupu / Ilość
+                </th>
+                <th scope="col" class="hide-on-mobile" onclick="sortTablen(3)">
+                    Ilość
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -22,12 +131,171 @@
                     <td>
                         <a href="@Url.Action("UserStocks", "Admin", new { UserId = stock.User_Id })">@stock.User_Id</a>
                     </td>
-                    <td>@stock.Stock_CIK</td>
-                    <td>@stock.Price_per_stock</td>
-                    <td>@stock.Date.ToShortDateString()</td>
-                    <td>@stock.Amount</td>
+                    <td>
+                        @stock.Stock_CIK
+                    </td>
+                    <td class="hide-on-mobile">
+                        @stock.Price_per_stock
+                    </td>
+                    <td>
+                        @stock.Date
+                    </td>
+                    <td class="show-on-mobile">
+                        @stock.Price_per_stock / @stock.Amount
+                    </td>
+                    <td class="hide-on-mobile">
+                        @stock.Amount
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    function sortTable2(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    function sortTablen(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    function sortTable2n(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>

@@ -144,12 +144,12 @@
                 @Html.DisplayFor(modelItem => item.n)
             </td>
                 <td>
-                    <button type="submit" class="btn btn-primary">Kup teraz</button>
 
-                    <form asp-action="PurchaseStock" method="post">
+                    <form asp-action="PurchaseStock" asp-controller="Stock" method="post">
                         <input type="hidden" name="Stock_CIK" value="@item.T" />
                         <input type="hidden" name="Price_per_stock" value="@item.c" />
-                        <input type="hidden" name="Currency" value="usd" />
+                        <button type="submit" class="btn btn-primary">Kup teraz</button>
+
                     </form>
                 </td>
             <td class="text-end">
