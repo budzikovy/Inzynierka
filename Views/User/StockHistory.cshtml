@@ -17,33 +17,94 @@
                 <tbody>
                     <tr>
                         <td>Łączna liczba kupionych akcji</td>
-                        <td>@Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount)</td>
+                        <td>
+                            @if (!Model.All.Where(x => x.Type_of_action == "purchase").Any())
+                            {
+                                <span>Brak danych</span>
+                            }else{
+                                <span>@Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount)</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Łączna liczba sprzedancyh akcji</td>
-                        <td>@Model.All.Where(x => x.Type_of_action == "sale").Sum(x => x.Amount)</td>
+
+                        <td>
+                            @if (!Model.All.Where(x => x.Type_of_action == "sale").Any())
+                            {
+                                <span>Brak danych</span>
+                            }
+                            else
+                            {
+                                <span>@Model.All.Where(x => x.Type_of_action == "sale").Sum(x => x.Amount)</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Łączna suma zainwestowanych pieniędzy</td>
-                        <td>@Math.Round(Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount * x.Price_per_stock_b),2) zł</td>
+                        <td>
+                            @if (!Model.All.Where(x => x.Type_of_action == "purchase").Any())
+                            {
+                                <span>Brak danych</span>
+                            }
+                            else
+                            {
+                                <span>@Math.Round(Model.All.Where(x => x.Type_of_action == "purchase").Sum(x => x.Amount * x.Price_per_stock_b),2) zł</span>
+                            }</td>
                     </tr>
                     <tr>
                         <td>Łączna wartość portfela(bazując na cenie zakupu)</td>
-                        <td>@Math.Round((decimal)Model.Active.Sum(x => x.Amount * x.Price_per_stock), 2) zł</td>
+                        <td>
+                            @if (!Model.Active.Any())
+                            {
+                                <span>Brak danych</span>
+                            }
+                            else
+                            {
+                                <span>@Math.Round((decimal)Model.Active.Sum(x => x.Amount * x.Price_per_stock), 2) zł</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Średnia cena kupionej akcji</td>
-                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b), 2) zł</td>
+                        <td>
+                            @if (!Model.All.Where(x => x.Type_of_action == "purchase").Any())
+                            {
+                                <span>Brak danych</span>
+                            }
+                            else
+                            {
+                                <span>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "purchase").Average(x => x.Price_per_stock_b), 2) zł</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Średnia cena sprzedanej akcji</td>
-                        <td>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s), 2) zł</td>
+                        <td>
+                            @if (!Model.All.Where(x => x.Type_of_action == "sale").Any())
+                            {
+                                <span>Brak danych</span>
+                            }
+                            else
+                            {
+                                <span>@Math.Round((decimal)Model.All.Where(x => x.Type_of_action == "sale").Average(x => x.Price_per_stock_s), 2) zł</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Łączny zysk/strata</td>
+                        @if (!Model.All.Where(x => x.Type_of_action == "purchase").Any())
+                            {
+                            <td>Brak danych</td>
+                        }
+                        else{
+                        
                         <td class="@(Model.All.Sum(x => x.Income) > 0 ? "gain" : Model.All.Sum(x => x.Income) < 0 ? "loss" : "")">
-                            @Math.Round((decimal)Model.All.Sum(x => x.Income),2)
-                        zł </td>
+                                @Math.Round((decimal)Model.All.Sum(x => x.Income),2)
+                                zł </td>
+                        }
+
+
                     </tr>
 
                 </tbody>
