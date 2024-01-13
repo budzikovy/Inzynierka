@@ -33,7 +33,7 @@
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item blue-hover">
-                            <a class="nav-link text-white cubic-md" asp-area="" asp-controller="Stock" asp-action="Index">Stocks</a>
+                            <a class="nav-link text-white cubic-md" asp-area="" asp-controller="Stock" asp-action="Index">Akcje</a>
                         </li>
 
                         @if (SignInManager.IsSignedIn(User))
@@ -41,15 +41,15 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Your Stocks
+                                    Twoje akcje
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="User"
-                                       asp-action="StockHistory">User Portfolio</a>
+                                       asp-action="StockHistory">Portfolio</a>
                                     <a class="dropdown-item" asp-controller="User"
-                                       asp-action="CurrentStocks">Current Stocks</a>
+                                       asp-action="CurrentStocks">Moje akcje</a>
                                     <a class="dropdown-item" asp-controller="User"
-                                       asp-action="Favourite">Favourite</a>
+                                       asp-action="Favourite">Ulubione akcje</a>
                                 </ul>
                             </li>
                         }
@@ -59,15 +59,15 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage
+                                    Zarządzaj
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Admin"
-                                       asp-action="Users">Users</a>
+                                       asp-action="Users">Użytkownicy</a>
                                     <a class="dropdown-item" asp-controller="Admin"
-                                       asp-action="ActiveStocks">Active Stocks</a>
+                                       asp-action="ActiveStocks">Aktywne akcje</a>
                                     <a class="dropdown-item" asp-controller="Admin"
-                                       asp-action="Statistics">Statistics</a>
+                                       asp-action="Statistics">Statystyki</a>
                                 </ul>
                             </li>
                         }
