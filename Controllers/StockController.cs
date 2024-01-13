@@ -309,7 +309,6 @@ namespace Inz_Fn.Controllers
             string from = model.from.ToString("yyyy-MM-dd");
             string to = model.to.ToString("yyyy-MM-dd");
             string apiUrl = $"https://api.polygon.io/v2/aggs/ticker/{symbol}/range/{multiplier}/{timespan}/{from}/{to}?apiKey={apiKey}";
-            Console.WriteLine(apiUrl);
             using HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(apiUrl);
 
