@@ -61,7 +61,9 @@
     <hr />
     @if (Model.tickDetails.branding != null)
     {
-        <img src="@Model.tickDetails.branding.logo_url" alt="Logo" />
+        <div class="tickerimg my-5">
+        <img src="@Model.tickDetails.branding.logo_url" alt="Logo"/>
+        </div>
     }
     <div class="col">
         <table class="table">

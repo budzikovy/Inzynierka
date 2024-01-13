@@ -283,15 +283,19 @@ namespace Inz_Fn.Controllers
         public async Task<IActionResult> DeleteFavourite(string Stock_CIK)
         {
             //First Fetch the User you want to Delete
+            Console.WriteLine(Stock_CIK);
+            Console.WriteLine(Stock_CIK);
+            Console.WriteLine(Stock_CIK);
+
+
             var fav = _context.FavouriteStocks.FirstOrDefault(x=>x.Stock_CIK== Stock_CIK);
             if (fav!=null) {
+                Console.WriteLine("Działa");
                 _context.FavouriteStocks.Remove(fav);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Favourite");
 
             }else { return RedirectToAction("Favourite"); };
-
-
 
         }
     }

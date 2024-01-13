@@ -67,7 +67,7 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 async Task CreateRoles(RoleManager<IdentityRole> roleManager)
 {
-    string[] roleNames = { "Admin", "User", "Manager" };
+    string[] roleNames = { "Admin", "User" };
     foreach (var roleName in roleNames)
     {
         var roleExist = await roleManager.RoleExistsAsync(roleName);

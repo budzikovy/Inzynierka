@@ -93,17 +93,19 @@
         </div>
     </div>
 </div>
-<div class="search-container hide-on-desktop my-3">
-    <form asp-action="Index" method="get">
+
+<div class="search-container hide-on-desktop-lg my-3">
+    <form asp-action="Index" method="get" class="search-container">
             <input type="text" class="search-input" name="searchString" />
-            <button type="submit" class="search-button" value="Szukaj">
+            <button type="submit" class="btn" value="Szukaj">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
                 <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
             </svg>
         </button>
     </form>
 </div>
-<table class="table table-blue mt-md-5">
+
+<table class="table table-blue mt-md-3 mt-lg-5">
     <thead class="align-middle">
         <tr>
             <th scope="col">
@@ -134,10 +136,10 @@
                     Liczba trasnsakcji
                 </a>
             </th>
-            <th></th>
-            <th scope="col" class="text-end hide-on-mobile align-middle">
-                <form asp-action="Index" method="get" class="hide-on-mobile-md">
-                    <input type="text" name="searchString" class="align-middle" />
+            <th class="btn-nopadding"></th>
+            <th scope="col" class="text-end align-middle btn-nopadding">
+                <form asp-action="Index" method="get" class="search-container hide-on-mobile-lg">
+                    <input type="text" name="searchString" class="search-input align-middle hide-on-mobile-lg" />
                     <button type="submit" class="btn" value="Szukaj">
                         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
                             <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
@@ -152,6 +154,7 @@
         <tr>
             <td class="btn-nopadding align-middle">
                     <form asp-action="AddToFavorites" asp-controller="Stock" method="get">
+                        <input type="text" name="stock_CIK" value="@item.T" hidden class="align-middle" />
                         <div style="display: flex; align-items: center;">
                             <button type="submit" @(item.isFavourite == true ? "disabled" : "") class="btn btn-nopadding @(item.isFavourite == true ? "favourite" : "not-favourite")">
                                 <div style="width:20px">
@@ -185,24 +188,24 @@
                 <td class="align-middle">
                 @Html.DisplayFor(modelItem => item.n)
             </td>
-                <td class="align-middle">
+                <td class="align-middle btn-nopadding">
 
                     <form asp-action="PurchaseStock" asp-controller="Stock" method="post">
                         <input type="hidden" name="Stock_CIK" value="@item.T" />
                         <input type="hidden" name="Price_per_stock" value="@item.c" />
-                        <button type="submit" class="btn">
+                        <button type="submit" class="btn btn-nopadding me-3 me-md-0">
                             <img src="~/images/icons/purchase.svg" />
                         </button>
 
                     </form>
                 </td>
-                <td class="text-end hide-on-mobile align-middle">
+                <td class="text-end hide-on-mobile align-middle btn-nopadding">
                         <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn" role="button">
                             <div class="detailicon">
                                 <svg class="bn-svg h-5 w-5" alt="Szczegóły" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M18 3H3v18h9.222A5.5 5.5 0 0118 11.97V3zM5.02 9.286L8.556 5.75l3.182 3.182 3.181-3.182 1.061 1.06-4.242 4.243-3.182-3.182-2.475 2.475-1.061-1.06zm12.544 9.278a2 2 0 10-2.828-2.828 2 2 0 002.828 2.828zm1.414-4.242a4.002 4.002 0 01.744 4.63l2.276 2.278-1.767 1.767-2.277-2.276a4.002 4.002 0 01-4.633-6.4 4 4 0 015.657 0z" fill="currentColor"></path></svg>
                             </div>
                         </a>
-            </td>
+                </td>
         </tr>
 }
     </tbody>

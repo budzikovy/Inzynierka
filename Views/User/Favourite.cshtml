@@ -1,113 +1,221 @@
 ﻿@model Inz_Fn.Models.FavouriteStockViewModel
-<table class="table table-blue mt-5 ">
+<div class="full-height">
+<div class="search-container hide-on-desktop-lg my-3">
+    <form asp-action="Index" method="get" class="search-container">
+        <input type="text" class="search-input" name="searchString" />
+        <button type="submit" class="btn" value="Szukaj">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 50 50">
+                <path
+                    d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
+                </path>
+            </svg>
+        </button>
+    </form>
+</div>
+
+<table class="table table-blue mt-5">
     <thead>
         <tr>
             <th scope="col">
-                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Symbol" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Symbol"
+                    asp-route-sortOrder="@(Model.sort?.ToString() == " Symbol" && Model.sortOrder?.ToString()=="asc"
+                    ? "desc" : "asc" )">
                     Symbol
                 </a>
             </th>
-            <th scope="col">
-                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Cena" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+            <th scope="col" class="hide-on-mobile">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Cena"
+                    asp-route-sortOrder="@(Model.sort?.ToString() == " Cena" && Model.sortOrder?.ToString()=="asc"
+                    ? "desc" : "asc" )">
                     Cena
                 </a>
 
             </th>
-            <th scope="col">
-                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Zmiana" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
+            <th scope="col" class="hide-on-mobile">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Zmiana"
+                    asp-route-sortOrder="@(Model.sort?.ToString() == " Zmiana" && Model.sortOrder?.ToString()=="asc"
+                    ? "desc" : "asc" )">
                     Zmiana dobowa(%)
                 </a>
             </th>
-            <th scope="col">
 
-                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Transakcje" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Liczba trasnsakcji
+            <th scope="col" class="show-on-mobile">
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Cena"
+                    asp-route-sortOrder="@(Model.sort?.ToString() == " Cena" && Model.sortOrder?.ToString()=="asc"
+                    ? "desc" : "asc" )">
+                    Cena / Zmiana
                 </a>
             </th>
 
-            <th scope="col" class="text-end">
-                <form asp-action="Favourite" method="get">
-                    <input type="text" name="searchString" />
-                    <button type="submit" class="btn btn-primary" value="Szukaj">Szukaj</button>
+
+            <th scope="col">
+
+                <a asp-action="Favourite" class="text-white text-decoration-none" asp-route-sort="Transakcje"
+                    asp-route-sortOrder="@(Model.sort?.ToString() == " Transakcje" && Model.sortOrder?.ToString()=="asc"
+                    ? "desc" : "asc" )">
+                    Liczba trasnsakcji
+                </a>
+            </th>
+            <th scope="col" class="text-end align-middle btn-nopadding">
+            </th>
+            <th scope="col" class="text-end align-middle btn-nopadding">
+                <form asp-action="Index" method="get" class="hide-on-mobile-md search-container">
+                    <input type="text" name="searchString" class="search-input align-middle" />
+                    <button type="submit" class="btn" value="Szukaj">
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
+                            viewBox="0 0 50 50">
+                            <path
+                                d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
+                            </path>
+                        </svg>
+                    </button>
                 </form>
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.StockTickers)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.T)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.c)
-                </td>
-                <td>
-                    <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
-                        @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
-                    </span>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.n)
-                </td>
-                <td>
-                    <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn btn-outline-primary" role="button">Zobacz</a>
-                </td>
-                <td>
-                    <form method="post" asp-action="DeleteFavourite" asp-route-Stock_CIK="@item.T">
-                        <span id="confirmDeleteSpan_@item.T" style="display:none">
-                            <span>Are you sure you want to Delete?</span>
-                            <button type="submit" class="btn btn-danger">Yes</button>
-                            <a href="#" class="btn btn-primary"
-                               onclick="confirmDelete('@item.T', false)">No</a>
-                        </span>
+        <tr id="row_@item.T">
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.T)
+            </td>
+            <td class="align-middle hide-on-mobile">
+                @Html.DisplayFor(modelItem => item.c)
+            </td>
+            <td class="align-middle hide-on-mobile">
+                <span class="@(item.dailyChange > 0 ? " gain" : item.dailyChange < 0 ? "loss" : "" )">
+                    @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                </span>
+            </td>
+            <td class="align-middle show-on-mobile">
+                <span>
+                    @Html.DisplayFor(modelItem => item.c) / 
+                </span>
+                <span class="@(item.dailyChange > 0 ? "gain" : item.dailyChange < 0 ? "loss" : "")">
+                    @(item.dailyChange > 0 ? "+" : "")@Math.Round(item.dailyChange, 2) %
+                </span>
+            </td>
 
-                        <span id="deleteSpan_@item.T">
-                            <a href="#" class="btn btn-danger"
-                               onclick="confirmDelete('@item.T', true)">Delete</a>
-                        </span>
-                    </form>
-                </td>
-            </tr>
+            <td class="align-middle">
+                @Html.DisplayFor(modelItem => item.n)
+            </td>
+            <td class="hide-on-mobile-md"></td>
+            <td class="text-end align-middle btn-nopadding hide-on-desktop">
+                <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn" role="button">
+                    <div class="detailicon">
+                        <svg class="bn-svg h-5 w-5" alt="Szczegóły" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M18 3H3v18h9.222A5.5 5.5 0 0118 11.97V3zM5.02 9.286L8.556 5.75l3.182 3.182 3.181-3.182 1.061 1.06-4.242 4.243-3.182-3.182-2.475 2.475-1.061-1.06zm12.544 9.278a2 2 0 10-2.828-2.828 2 2 0 002.828 2.828zm1.414-4.242a4.002 4.002 0 01.744 4.63l2.276 2.278-1.767 1.767-2.277-2.276a4.002 4.002 0 01-4.633-6.4 4 4 0 015.657 0z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </a>
+            </td>
+            <td class="text-end align-middle btn-nopadding">
+                <span class="hide-on-mobile-md">
+                <a asp-action="TickerDetails" asp-controller="Stock" asp-route-id="@item.T" class="btn" role="button">
+                    <div class="detailicon">
+                        <svg class="bn-svg h-5 w-5" alt="Szczegóły" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M18 3H3v18h9.222A5.5 5.5 0 0118 11.97V3zM5.02 9.286L8.556 5.75l3.182 3.182 3.181-3.182 1.061 1.06-4.242 4.243-3.182-3.182-2.475 2.475-1.061-1.06zm12.544 9.278a2 2 0 10-2.828-2.828 2 2 0 002.828 2.828zm1.414-4.242a4.002 4.002 0 01.744 4.63l2.276 2.278-1.767 1.767-2.277-2.276a4.002 4.002 0 01-4.633-6.4 4 4 0 015.657 0z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </a>
+                </span>
+
+                                <span id="deleteSpan_@item.T" class="">
+                    <a href="#" class="btn" data-item-id="@item.T" onclick="showConfirmationModal(this)">
+                        <?xml version="1.0" encoding="utf-8"?>
+                        <svg class="trash" width="24px" height="24px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 12L14 16M14 12L10 16M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M18 6V16.2C18 17.8802 18 18.7202 17.673 19.362C17.3854 19.9265 16.9265 20.3854 16.362 20.673C15.7202 21 14.8802 21 13.2 21H10.8C9.11984 21 8.27976 21 7.63803 20.673C7.07354 20.3854 6.6146 19.9265 6.32698 19.362C6 18.7202 6 17.8802 6 16.2V6"
+                                stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </span>
+
+            </td>
+        </tr>
         }
     </tbody>
 </table>
 
+<div id="confirmationModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="text-center mt-5">
-    <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")" href="@(Model.Pagination.CurrentPage > 1 ? Url.Action("Favourite", "User", new { currentPage = Model.Pagination.CurrentPage - 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">&lt;</a>
+    <a class="btn btn-primary @(Model.Pagination.CurrentPage == 1 ? " disabled" : "" )"
+        href="@(Model.Pagination.CurrentPage > 1 ? Url.Action(" Favourite", "User" , new {
+        currentPage=Model.Pagination.CurrentPage - 1, searchString=Model.searchStr, sort=Model.sort,
+        sortOrder=Model.sortOrder }) : "#" )" role="button">&lt;</a>
 
-    @for (var i = 1; i <= Model.Pagination.TotalPages; i++)
-    {
-        if (i == 1 || i == Model.Pagination.TotalPages || (i <= Model.Pagination.CurrentPage + 5 && i >= Model.Pagination.CurrentPage - 5))
-
+    @for (var i = 1; i <= Model.Pagination.TotalPages; i++) { if (i==1 || i==Model.Pagination.TotalPages || (i
+        <=Model.Pagination.CurrentPage + 5 && i>= Model.Pagination.CurrentPage - 5))
         {
-            if (i == Model.Pagination.CurrentPage)
-            {
-                <button type="button" class="btn btn-primary" disabled>@i</button>
-            }
-            else
-            {
-                <a class="btn btn-primary" href="@Url.Action("Favourite", "User", new { currentPage = i,searchString = Model.searchStr,sort=Model.sort, sortOrder=Model.sortOrder })" role="button">@i</a>
-            }
+        if (i == Model.Pagination.CurrentPage)
+        {
+        <button type="button" class="btn btn-primary" disabled>@i</button>
+        }
+        else
+        {
+        <a class="btn btn-primary" href="@Url.Action(" Favourite", "User" , new { currentPage=i,
+            searchString=Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder })" role="button">@i</a>
+        }
+        }
         }
 
-    }
-    <a class="btn btn-primary @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")" href="@(Model.Pagination.CurrentPage<Model.Pagination.TotalPages ? Url.Action("Favourite", "User", new { currentPage = Model.Pagination.CurrentPage + 1, searchString = Model.searchStr, sort=Model.sort, sortOrder=Model.sortOrder }) : "#")" role="button">></a>
+        <a class="btn btn-primary @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? " disabled" : "" )"
+            href="@(Model.Pagination.CurrentPage<Model.Pagination.TotalPages ? Url.Action(" Favourite", "User" , new {
+            currentPage=Model.Pagination.CurrentPage + 1, searchString=Model.searchStr, sort=Model.sort,
+            sortOrder=Model.sortOrder }) : "#" )" role="button">></a>
+</div>
 </div>
 
 <script>
-    function confirmDelete(uniqueId, isDeleteClicked) {
-        var deleteSpan = 'deleteSpan_' + uniqueId;
-        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
 
-        if (isDeleteClicked) {
-            $('#' + deleteSpan).hide();
-            $('#' + confirmDeleteSpan).show();
-        } else {
-            $('#' + deleteSpan).show();
-            $('#' + confirmDeleteSpan).hide();
-        }
+    function showConfirmationModal(element) {
+        var confirmationModal = $('#confirmationModal');
+        var confirmDeleteBtn = $('#confirmDeleteBtn');
+        var itemId = $(element).data('item-id');
+
+        confirmDeleteBtn.off('click').on('click', function () {
+            $.ajax({
+                url: '/User/DeleteFavourite', // Aktualizuj ścieżkę, jeśli trzeba
+                type: 'POST',
+                data: { Stock_CIK: itemId },
+                success: function () {
+                    confirmationModal.modal('hide');
+
+                    $('#row_' + itemId).remove();
+                },
+                error: function () {
+                    console.error('Błąd podczas usuwania.');
+                }
+            });
+        });
+
+        confirmationModal.modal('show');
     }
+
+
 </script>
