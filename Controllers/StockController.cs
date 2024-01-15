@@ -334,12 +334,15 @@ namespace Inz_Fn.Controllers
         }
         private async Task<TickerPrevClose> GetStockPreviousClose(string Ticker)
         {
+
             string apiKey = "TuP9o6bqsfqxilONFO1cVhApCcvy7wTR";
             string symbol = Ticker;
             string apiUrl = $"https://api.polygon.io/v2/aggs/ticker/{symbol}/prev?adjusted=true&apiKey={apiKey}";
 
             using HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+
             if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();

@@ -37,9 +37,24 @@ namespace Inz_Fn.Controllers
             {
                 return Challenge(); // Prompt the user to log in if not already
             }
-
+            var allStocks = await GetGroupedDaily();
+            List<CurrentStockViewModel> currentUserStocks = new List<CurrentStockViewModel>();
             var userStocks = _context.Stock.Where(s => s.User_Id == currentUser.Id).ToList();
-            return View(userStocks);
+            foreach (var item in userStocks)
+            {
+                var model = new CurrentStockViewModel
+                {
+                    Id = item.Id,
+                    Stock_CIK = item.Stock_CIK,
+                    User_Id = item.User_Id,
+                    Price_per_stock = item.Price_per_stock,
+                    Date = item.Date,
+                    Amount = item.Amount,
+                    curretnPrice = allStocks.Where(s => s.T == item.Stock_CIK).ToList().FirstOrDefault().c
+                };
+                currentUserStocks.Add(model);
+            }
+            return View(currentUserStocks);
         }
         public async Task<IActionResult> SellStock(Guid id)
         {
