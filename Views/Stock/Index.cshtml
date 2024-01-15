@@ -110,30 +110,30 @@
         <tr>
             <th scope="col">
                 <a asp-action="Index" asp-route-sort="Symbol" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Symbol" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Symbol
+                    Symbol <img src="~/images/icons/sort.svg" class="ps-2  align-middle"/>
                 </a>
             </th>
             <th scope="col" class="hide-on-mobile">
                 <a asp-action="Index" asp-route-sort="Cena" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Cena
+                    Cena <img src="~/images/icons/sort.svg" class="ps-2  align-middle" />
                 </a>
 
             </th>
             <th scope="col" class="hide-on-mobile">
                 <a asp-action="Index" asp-route-sort="Zmiana" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Zmiana" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Zmiana dobowa(%)
+                    Zmiana dobowa(%) <img src="~/images/icons/sort.svg" class="ps-2 align-middle" />
                 </a>
             </th>
 
             <th scope="col" class="show-on-mobile">
                 <a asp-action="Index" asp-route-sort="Cena" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Cena" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Cena / Zmiana
+                    Cena / Zmiana <img src="~/images/icons/sort.svg" class="ps-2 align-middle" />
                 </a>
             </th>
 
             <th scope="col">
                 <a asp-action="Index" asp-route-sort="Transakcje" class="text-white text-decoration-none" asp-route-sortOrder="@(Model.sort?.ToString() == "Transakcje" && Model.sortOrder?.ToString() == "asc" ? "desc" : "asc")">
-                    Liczba trasnsakcji
+                    Liczba trasnsakcji <img src="~/images/icons/sort.svg" class="ps-2 align-middle" />
                 </a>
             </th>
             <th class="btn-nopadding"></th>

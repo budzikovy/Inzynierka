@@ -33,7 +33,7 @@
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item blue-hover">
-                            <a class="nav-link text-white cubic-md" asp-area="" asp-controller="Stock" asp-action="Index">Akcje</a>
+                            <a class="nav-link text-white cubic-md" asp-area="" asp-controller="Stock" asp-action="Index">Akcje </a>
                         </li>
 
                         @if (SignInManager.IsSignedIn(User))
@@ -41,7 +41,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Twoje akcje
+                                    Twoje akcje<img src="~/images/icons/expand.svg" class="ps-2" />
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="User"
@@ -59,7 +59,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link text-white blue-hover cubic-md" href="#" id="navbarDropdownMenuLink" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Zarządzaj
+                                    Zarządzaj<img src="~/images/icons/expand.svg" class="ps-2"/>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" asp-controller="Admin"
@@ -81,7 +81,7 @@
         </nav>
     </header>
 
-    <div class="@(!isHomePage ? "container" : "")">
+    <div class="@(!isHomePage ? "container full-height" : "")">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -90,7 +90,7 @@
     <footer class="border-top footer text-muted bg-blue py-3 text-wrap ">
         <div class="container text-white">
             <b>Wykonali: </b>Jakub Budziński, Krzysztof Dąbrowski<br />
-            <b>Promotor: </b>Dr. Marcin Skoczylas<br />
+            <b>Promotor: </b>Dr. Inż. Marcin Skoczylas<br />
             <b>&copy; 2023/24 Praca powstała na wydziale Informatyki Politechniki Białostockiej</b>
         </div>
     </footer>

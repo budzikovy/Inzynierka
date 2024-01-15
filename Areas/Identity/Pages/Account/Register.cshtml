@@ -1,14 +1,14 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Rejestracja";
 }
 
 <div class="full-height d-flex justify-content-center flex-column">
     <div class="row justify-content-center">
-        <div class="col-md-4 border-blue text-center">
+        <div class="col-lg-6 border-blue text-center">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
+            <h2>Załóż konto</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
@@ -26,7 +26,7 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Register</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Zarejestruj się</button>
         </form>
 
             <p class="mt-3">

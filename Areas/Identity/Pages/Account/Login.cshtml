@@ -2,11 +2,11 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Logowanie";
 }
 <div class="full-height d-flex justify-content-center flex-column">
 <div class="row justify-content-center">
-    <div class="col-md-4 border-blue text-center">
+    <div class="col-lg-6 border-blue text-center">
             <h2>Zaloguj się</h2>
         <section>
             <form id="account" method="post">
@@ -34,10 +34,12 @@
                 </div>
                 <div>
                     <p class="mt-3">
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Zapomniałeś hasła?</a>
                     </p>
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">
+                                Wyślij ponownie e-mail z potwierdzeniem
+                            </a>
                     </p>
                         <p>
                             Nie masz konta?

@@ -1,6 +1,6 @@
-﻿@model Inz_Fn.Models.TickerDetailsPrice
+﻿    @model Inz_Fn.Models.TickerDetailsPrice
 @{
-    ViewData["Title"] = "Ticker Details";
+    ViewData["Title"] = "Sczegóły akcji";
 }
 <style>
     body {
@@ -57,7 +57,9 @@
 </style>
 <h1>@ViewData["Title"]</h1>
 <div>
-    <h4>TickDetails</h4>
+    <div>
+        <a asp-action="Index" type="button" class="btn btn-primary text-white">Powrót</a>
+    </div>
     <hr />
     @if (Model.tickDetails.branding != null)
     {
@@ -69,43 +71,43 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <td>Nazwa</td>
+                    <td class="fw-bold">Nazwa</td>
                     <td>
                         @Model.tickDetails.name
                     </td>
                 </tr>
                 <tr>
-                    <td>Symbol</td>
+                    <td class="fw-bold">Symbol</td>
                     <td>
                         @Model.tickDetails.ticker
                     </td>
                 </tr>
                 <tr>
-                    <td>Waluta</td>
+                    <td class="fw-bold">Waluta</td>
                     <td>
                         @Model.tickDetails.currency_name
                     </td>
                 </tr>
                 <tr>
-                    <td>Siedziba(skrót kraju)</td>
+                    <td class="fw-bold">Siedziba(skrót kraju)</td>
                     <td>
                         @Model.tickDetails.locale
                     </td>
                 </tr>
                 <tr>
-                    <td>Numer kontaktowy</td>
+                    <td class="fw-bold">Numer kontaktowy</td>
                     <td>
                         @Model.tickDetails.phone_number
                     </td>
                 </tr>
                 <tr>
-                    <td>Strona Internetowa</td>
+                    <td class="fw-bold">Strona Internetowa</td>
                     <td>
                         @Model.tickDetails.homepage_url
                     </td>
                 </tr>
                 <tr>
-                    <td>Adres</td>
+                    <td class="fw-bold">Adres</td>
                     <td>
                             @if (Model.tickDetails.address != null)
                             {
@@ -122,41 +124,40 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Opis</td>
+                    <td class="fw-bold">Opis</td>
                     <td>
                         @Model.tickDetails.description
                     </td>
                 </tr>
                 <tr>
-                    <td>Data założenia</td>
+                    <td class="fw-bold">Data założenia</td>
                     <td>
                         @Model.tickDetails.list_date
                     </td>
                 </tr>
+                <tr>
+        <td class="col-sm-2 fw-bold">
+            Cena zamknięcia
+        </td>
+        <td class="col-sm-10">
+                        @Model.tickerPrevClose.c
+        </td>
+        </tr>
             </tbody>
         </table>
     </div>
 
-    <dl class="row">
-        
-        <dt class="col-sm-2">
-            Cena zamknięcia 
-        </dt>
-        <dd class="col-sm-10">
-            @Model.tickerPrevClose.c
-        </dd>
+ 
         <form asp-action="PurchaseStock" method="post">
             <input type="hidden" name="Stock_CIK" value="@Model.tickDetails.ticker" />
             <input type="hidden" name="Price_per_stock" value="@Model.tickerPrevClose.c" />
             <button type="submit" class="btn btn-primary">Kup teraz</button>
         </form>
-    </dl>
 
-    
+
+
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 <script type="text/javascript">
     function changeView(evt, action) {
         var i, tabcontent, tablinks;

@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<Inz_Fn.Models.Stock>
 
 <div class="container">
-    <h2>My Stocks</h2>
-    <table class="table table-striped">
+    <h1>Moje akcje</h1>
+    <table class="table table-blue mt-5">
         <thead>
             <tr>
-                <th>CIK</th>
-                <th>Price per Stock</th>
-                <th>Date</th>
-                <th>Amount</th>
+                <th>Symbol</th>
+                <th class="hide-on-mobile">Cena</th>
+                <th class="show-on-mobile">Cena / Ilość</th>
+                <th>Data zakupu</th>
+                <th class="hide-on-mobile">Ilość</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -16,10 +18,11 @@
             {
                 <tr>
                     <td>@stock.Stock_CIK</td>
-                    <td>@stock.Price_per_stock.ToString("C")</td>
+                    <td class="hide-on-mobile">@stock.Price_per_stock.ToString("C")</td>
+                    <td class="show-on-mobile">@stock.Price_per_stock.ToString("C") / @stock.Amount</td>
                     <td>@stock.Date.ToShortDateString()</td>
-                    <td>@stock.Amount</td>
-                    <td>
+                    <td class="hide-on-mobile">@stock.Amount</td>
+                    <td class="text-center">
                         <form asp-action="SellStock" method="post">
                             <input type="hidden" name="id" value="@stock.Id" />
                             <button type="submit" class="btn btn-danger">Sell</button>
