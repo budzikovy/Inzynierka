@@ -387,6 +387,10 @@ namespace Inz_Fn.Controllers
                 {
                     value = 3;
                 }
+                else if (today.DayOfWeek == DayOfWeek.Tuesday && today.Hour < 10)
+                {
+                    value = 4;
+                }
                 else
                 {
                     value = 1;
@@ -395,6 +399,7 @@ namespace Inz_Fn.Controllers
                             value += 1;
                     }
                 }
+
                 
                 Console.WriteLine(today.Hour);
                 string date = DateTime.Now.AddDays(-value).ToString("yyyy-MM-dd");

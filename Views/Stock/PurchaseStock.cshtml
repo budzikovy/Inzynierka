@@ -1,43 +1,44 @@
 ﻿@model Inz_Fn.Models.StockBuyModel
 
-<form asp-action="SaveStock" method="post">
-    <div class="form-group">
-        <label for="Stock_CIK">Stock ID</label>
-        <input type="text" class="form-control" id="Stock_CIK" name="Stock_CIK" value="@Model.Stock_CIK" required readonly>
-    </div>
-    <div class="form-group">
-        <label for="Price_per_stock">Price per Stock</label>
-        <input type="text" class="form-control" id="Price_per_stock" name="Price_per_stock" value="@Model.Price_per_stock" required readonly>
-
-    </div>
-    <div class="form-group">
-        <label for="Amount">Amount</label>
-        <input type="number" class="form-control" id="Amount" name="Amount" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 <div class="tab">
-    <button class="tablinks" onclick="changeView(event, 'Hour')" id="defaultOpen">Hour</button>
-    <button class="tablinks" onclick="changeView(event, 'Minute')">Minute</button>
-</div>
-<div id="Hour" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <button id="toggleChartType" type="button">Toggle Chart Type</button>
-
-    <div id="stockChartContainer" style="height: 400px; min-width: 310px"></div>
-
+    <a asp-action="Index" type="button" class="tablinks btn blue-button text-white">Powrót</a>
 </div>
 
-<div id="Minute" class="tabcontent">
-    <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-    <button id="toggleChartType2" type="button">Toggle Chart Type</button>
-
-    <div id="stockChartContainer2" style="height: 400px; min-width: 310px"></div>
+<div id="Hour" class="tabcontent border-blue my-3">
+    <div id="stockChartContainer" style="width: 100%; height: 100%;"></div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div id="Minute" class="tabcontent border-blue my-3">
+    <div id="stockChartContainer2" style="width: 100%; height: 100%;"></div>
 </div>
+
+<div class="tab mb-3">
+    <button class="tablinks btn blue-button text-white mx-2" onclick="changeView(event, 'Hour')" id="defaultOpen">Godziny</button>
+    <button class="tablinks btn blue-button text-white" onclick="changeView(event, 'Minute')">Minuty</button>
+    <button class="tablinks btn blue-button text-white mx-2" id="toggleChartType" type="button">Typ wykresu</button>
+</div>
+
+<form asp-action="SaveStock" method="post">
+    <div class="d-flex justify-content-center flex-column align-items-center mb-5">
+        <div class="d-flex flex-column" style="max-width: 320px">
+            <div class="d-flex my-2">
+                <label class="me-1 fw-bold d-flex align-items-center" for="Stock_CIK">Symbol: </label>
+                <input type="text" class="form-control" id="Stock_CIK" name="Stock_CIK" value="@Model.Stock_CIK" required readonly>
+            </div>
+            <div class="d-flex">
+                <label class="me-1 fw-bold d-flex align-items-center nowrap" for="Price_per_stock">Cena akcji: </label>
+                <input type="text" class="form-control" id="Price_per_stock" name="Price_per_stock" value="@Model.Price_per_stock" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="Amount" class="my-2">Ile akcji kupujesz?</label>
+                <input type="number" class="form-control" id="Amount" name="Amount" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-2">Kup akcje</button>
+        </div>
+    </div>
+</form>
+
+
 <script type="text/javascript">
     $(function () {
         var data = @Html.Raw(Json.Serialize(Model.stockModels));
@@ -59,8 +60,21 @@
         }
 
         var chart = Highcharts.stockChart('stockChartContainer', {
+
+            chart: {
+                height: (9 / 16 * 90) + '%'
+            },
+
             rangeSelector: {
                 selected: 1
+            },
+
+
+            plotOptions: {
+                candlestick: {
+                    color: '#FF0000',
+                    upColor: '#00FF00'
+                }
             },
 
             title: {
@@ -75,7 +89,7 @@
                 title: {
                     text: 'OHLC'
                 },
-                height: '60%',
+                height: '80%',
                 lineWidth: 2
             }, {
                 labels: {
@@ -85,8 +99,8 @@
                 title: {
                     text: 'Volume'
                 },
-                top: '65%',
-                height: '35%',
+                top: '80%',
+                height: '20%',
                 offset: 0,
                 lineWidth: 2
             }],
@@ -103,19 +117,19 @@
             }]
         });
 
+        function toggleChartType(series) {
+            series.update({
+                type: series.type === 'candlestick' ? 'line' : 'candlestick'
+            });
+        }
+
         $('#toggleChartType').click(function () {
-            var series = chart.series[0];
-            if (series.type === 'candlestick') {
-                series.update({
-                    type: 'line'
-                });
-            } else {
-                series.update({
-                    type: 'candlestick'
-                });
-            }
+            toggleChartType(chart.series[0]);
         });
-    }); $(function () {
+
+    });
+    
+    $(function () {
         var data = @Html.Raw(Json.Serialize(Model.stockModels2));
         var ohlc = [], volume = [];
 
@@ -135,6 +149,11 @@
         }
 
         var chart = Highcharts.stockChart('stockChartContainer2', {
+
+            chart: {
+                height: (9 / 16 * 90) + '%' // 16:9 ratio
+            },
+
             rangeSelector: {
                 buttons: [{
                     type: 'minute',
@@ -160,6 +179,13 @@
                     type: 'all',
                     text: 'All'
                 }]
+            },
+
+            plotOptions: {
+                candlestick: {
+                    color: '#FF0000',
+                    upColor: '#00FF00'
+                }
             },
 
             title: {
@@ -201,20 +227,18 @@
                 yAxis: 1
             }]
         });
+        function toggleChartType(series) {
+            series.update({
+                type: series.type === 'candlestick' ? 'line' : 'candlestick'
+            });
+        }
 
-        $('#toggleChartType2').click(function () {
-            var series = chart.series[0];
-            if (series.type === 'candlestick') {
-                series.update({
-                    type: 'line'
-                });
-            } else {
-                series.update({
-                    type: 'candlestick'
-                });
-            }
+        $('#toggleChartType').click(function () {
+            toggleChartType(chart.series[0]);
         });
+
     });
+
     function changeView(evt, action) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");
@@ -229,6 +253,6 @@
         evt.currentTarget.className += " active";
     }
 
-    // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
+
 </script>

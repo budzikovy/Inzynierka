@@ -5,7 +5,8 @@
     ViewBag.Title = "All Users";
 }
 
-<h1>All Users</h1>
+<h1>Wszyscy użytkownicy</h1>
+<hr />
 
 @if (Model.Any())
 {
@@ -22,7 +23,7 @@
 
                 <form method="post" asp-action="DeleteUser" asp-route-UserId="@user.Id">
                     <a asp-controller="Admin" asp-action="EditUser"
-                       asp-route-UserId="@user.Id" class="btn btn-primary">Edit</a>
+                       asp-route-UserId="@user.Id" class="btn btn-primary">Edytuj</a>
 
                     <span id="confirmDeleteSpan_@user.Id" style="display:none">
                         <span>Are you sure you want to Delete?</span>
@@ -33,7 +34,7 @@
 
                     <span id="deleteSpan_@user.Id">
                         <a href="#" class="btn btn-danger"
-                           onclick="confirmDelete('@user.Id', true)">Delete</a>
+                           onclick="confirmDelete('@user.Id', true)">Usuń</a>
                     </span>
                 </form>
             </div>

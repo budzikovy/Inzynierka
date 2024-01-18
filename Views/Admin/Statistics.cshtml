@@ -1,5 +1,5 @@
 ﻿@model AdmUserStocksModel
-<h1>All Users Stats</h1>
+<h1>Statystyki użytkowników</h1>
 <div class="container-fluid">
     <div class="row">
         <div class="col d-flex justify-content-center align-items-center">
@@ -50,9 +50,9 @@
     </div>
 </div>
 <div class="tab">
-    <button type="button" class="btn text-white blue-button btn-lg" onclick="changeView(event, 'Bought')" id="defaultOpen">Bought</button>
-    <button type="button" class="btn text-white blue-button btn-lg mx-3" onclick="changeView(event, 'Sold')">Sold</button>
-    <button type="button" class="btn text-white blue-button btn-lg" onclick="location.href='@Url.Action("ActiveStocks", "Admin")'">Active</button>
+    <button type="button" class="btn text-white blue-button btn-lg" onclick="changeView(event, 'Bought')" id="defaultOpen">Kupione</button>
+    <button type="button" class="btn text-white blue-button btn-lg mx-3" onclick="changeView(event, 'Sold')">Sprzedane</button>
+    <button type="button" class="btn text-white blue-button btn-lg" onclick="location.href='@Url.Action("ActiveStocks", "Admin")'">Aktywne</button>
 </div>
 <p></p>
 <div id="Bought" class="tabcontent">
@@ -60,22 +60,22 @@
         <thead>
             <tr>
                 <th scope="col" onclick="sortTable(0)">
-                    Ticker
+                    Symbol
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTablen(1)">
-                    Price
+                    Cena
                 </th>
                 <th scope="col" onclick="sortTable(2)">
-                    Purchase date
+                    Data zakupu
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTablen(3)">
-                    Amount
+                    Ilość
                 </th>
                 <th scope="col" class="show-on-mobile" onclick="sortTablen(1)">
-                    Amount / Price
+                    Ilość / Cena
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTablen(4)">
-                    Invested Sum
+                    Zainwestowana suma
                 </th>
             </tr>
         </thead>
@@ -118,32 +118,32 @@
         <thead>
             <tr>
                 <th scope="col" onclick="sortTable2(0)">
-                    Ticker
+                    Symbol
                 </th>
                 <th scope="col" onclick="sortTable2(6)">
-                    Sale date
+                    Data sprzedaży
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTable2n(1)">
-                    Price
+                    Cena
                 </th>
                 <th scope="col" class="hide-on-mobile hide-on-mobile-md" onclick="sortTable2(2)">
-                    Date of purchase
+                    Data zakupu
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTable2n(3)">
-                    Amount
+                    Ilość
                 </th>
                 <th scope="col" class="show-on-mobile" onclick="sortTablen(1)">
-                    Amount / Price
+                    Ilość / Cena
                 </th>
                 <th scope="col" class="hide-on-mobile hide-on-mobile-md" onclick="sortTable2n(4)">
-                    Invested Sum
+                    Zainwestowna suma
                 </th>
                 <th scope="col" class="hide-on-mobile" onclick="sortTable2n(5)">
-                    Sale price
+                    Cena sprzedaży
                 </th>
 
                 <th scope="col" onclick="sortTable2n(7)">
-                    Income
+                    Przychód
                 </th>
             </tr>
         </thead>
